@@ -1,0 +1,51 @@
+# Build results
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.opencode/
+
+# Visual Studio cache / options
+.vs/
+.vsconfig
+*.cache
+
+# JetBrains Rider / ReSharper
+.idea/
+*.DotSettings.user
+
+# Test results
+TestResults/
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# User secrets & environment
+.env
+appsettings.Development.json
+secrets.json
+
+# Logs
+*.log
+logs/
+log/
+
+# Publish / output
+publish/
+*.publish.xml
+*.pubxml.user
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# User-uploaded content
+wwwroot/uploads/
