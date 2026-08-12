@@ -95,5 +95,3 @@ Password: Admin@123456
 - `Instructor`
 - `Student`
 
-## License
-MIT
