@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using EduVibe.DTOs.Student;
+using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
-using EduVibe.Services;
 using Microsoft.AspNetCore.Authorization;
-using NuGet.Protocol;
 namespace EduVibe.Controllers;
 
 [Authorize(Roles ="Admin")]

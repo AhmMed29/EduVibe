@@ -2,7 +2,7 @@ using EduVibe.DTOs.Instructor;
 using EduVibe.Models.Entities;
 using EduVibe.Models.Response;
 
-namespace EduVibe.Services;
+namespace EduVibe.Interfaces;
 
 public interface IInstructorService
 {

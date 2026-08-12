@@ -11,7 +11,6 @@ namespace EduVibe.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        #region For Migrations Only
         public AppDbContext()
         {
 
@@ -24,11 +23,10 @@ namespace EduVibe.Data
                     .SetBasePath(AppContext.BaseDirectory)
                     .AddJsonFile("appsettings.json")
                     .Build();
-                var connectionString = configuration.GetSection("connectionString").Value;
+                var connectionString = configuration.GetConnectionString("connectionString");
                 optionsBuilder.UseSqlServer(connectionString);
             }
         }
-        #endregion
         
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Instructor> Instructors { get; set; }

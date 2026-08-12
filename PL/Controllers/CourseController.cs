@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using EduVibe.DTOs.Course;
+using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
 using EduVibe.Services;
 

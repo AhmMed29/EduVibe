@@ -9,6 +9,7 @@ using System.Text;
 using BLL.Interfaces;
 using BLL.Services;
 using BLL.Settings;
+using EduVibe.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
@@ -25,35 +26,18 @@ namespace EduVibe
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
 
-            builder.Services.AddSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "bearer",
-                    BearerFormat = "JWT",
-                    In = ParameterLocation.Header,
-                    Description = "Enter your token"
-                });
-
-                options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
-                {
-                    { new OpenApiSecuritySchemeReference("Bearer", null, null), new List<string>() }
-                });
-            });
-            
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
             builder.Services.AddScoped<ITokenService, TokenService>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            // builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddScoped<IStudentService, StudentService>();
             builder.Services.AddScoped<ICourseService, CourseService>();
-            builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+            builder.Services.AddScoped<IDepartmentService, DepartmentService>(); 
             builder.Services.AddScoped<IInstructorService, InstructorService>();
-
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            
             //builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
@@ -102,7 +86,6 @@ namespace EduVibe
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
-                .AddApiEndpoints()
                 .AddDefaultTokenProviders(); /* For Email Confirm & Password Reset */
             builder.Services.AddDataProtection();
 
@@ -120,12 +103,8 @@ namespace EduVibe
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapIdentityApi<ApplicationUser>(); // db tables, endpoints & more..
             app.MapControllers();
 
-            // For Retrieving Claims Only
-            app.Map("/", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}")
-                .RequireAuthorization();
 
             #region Seeding Admins
             using (var scope = app.Services.CreateScope())

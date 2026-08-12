@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using EduVibe.Data;
 using EduVibe.DTOs.Department;
+using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
 using EduVibe.Models.Exceptions;
 using EduVibe.Models.Response;

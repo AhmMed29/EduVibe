@@ -1,11 +1,9 @@
 using EduVibe.Models.Entities;
 
-namespace BLL.Interfaces
+namespace BLL.Interfaces;
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        Task<string> GenerateAccessTokenAsync(ApplicationUser user);
-        Task<string> GenerateRefreshTokenAsync(ApplicationUser user);
-        Task<string> GetPrincipleFromExpiredToken(ApplicationUser user);
-    }
+    Task<string> GenerateAccessTokenAsync(ApplicationUser user);
+    Task<string> GenerateRefreshTokenAsync(ApplicationUser user);
+    Task<string> GetPrincipleFromExpiredToken(ApplicationUser user);
 }
