@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVibe Admin</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+<div class="admin-layout">
+
+    <!-- ===== Sidebar ===== -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">EduVibe <span class="admin-logo-badge">Admin</span></div>
+        <nav class="admin-nav">
+            <a class="admin-nav-item active" data-section="dashboard">Dashboard</a>
+            <a class="admin-nav-item" data-section="students">Students</a>
+            <a class="admin-nav-item" data-section="courses">Courses</a>
+            <a class="admin-nav-item" data-section="instructors">Instructors</a>
+            <a class="admin-nav-item" data-section="departments">Departments</a>
+        </nav>
+        <div class="admin-sidebar-footer">
+            <div class="admin-user">
+                <div class="admin-user-avatar">A</div>
+                <div>
+                    <div class="admin-user-name" id="adminUserName">-</div>
+                    <div class="admin-user-email" id="adminUserEmail">-</div>
+                </div>
+            </div>
+            <button class="admin-logout" onclick="logout()">Logout</button>
+        </div>
+    </aside>
+
+    <!-- ===== Main ===== -->
+    <main class="admin-main">
+        <header class="admin-topbar">
+            <h1 id="pageTitle">Dashboard</h1>
+            <button id="langToggle" class="lang-toggle">عربي</button>
+        </header>
+
+        <div class="admin-content">
+
+            <!-- ===== Dashboard ===== -->
+            <section id="section-dashboard" class="admin-section" style="display:block">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="statStudents">-</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statCourses">-</div>
+                        <div class="stat-label">Total Courses</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statInstructors">-</div>
+                        <div class="stat-label">Total Instructors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="statDepartments">-</div>
+                        <div class="stat-label">Total Departments</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== Students ===== -->
+            <section id="section-students" class="admin-section">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2>Students</h2>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input class="search-bar" id="studentSearch" placeholder="Search...">
+                            <button class="btn-primary" onclick="openModal('student')">+ Add</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Department</th><th>Gender</th><th>Actions</th></tr></thead>
+                        <tbody id="studentsBody"></tbody>
+                    </table>
+                    <div class="pagination" id="studentsPagination"></div>
+                </div>
+            </section>
+
+            <!-- ===== Courses ===== -->
+            <section id="section-courses" class="admin-section">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2>Courses</h2>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input class="search-bar" id="courseSearch" placeholder="Search...">
+                            <button class="btn-primary" onclick="openModal('course')">+ Add</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Title</th><th>Credits</th><th>Duration (h)</th><th>Price/Hour</th><th>Department</th><th>Actions</th></tr></thead>
+                        <tbody id="coursesBody"></tbody>
+                    </table>
+                    <div class="pagination" id="coursesPagination"></div>
+                </div>
+            </section>
+
+            <!-- ===== Instructors ===== -->
+            <section id="section-instructors" class="admin-section">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2>Instructors</h2>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input class="search-bar" id="instructorSearch" placeholder="Search...">
+                            <button class="btn-primary" onclick="openModal('instructor')">+ Add</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Salary</th><th>Department</th><th>Actions</th></tr></thead>
+                        <tbody id="instructorsBody"></tbody>
+                    </table>
+                    <div class="pagination" id="instructorsPagination"></div>
+                </div>
+            </section>
+
+            <!-- ===== Departments ===== -->
+            <section id="section-departments" class="admin-section">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h2>Departments</h2>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input class="search-bar" id="departmentSearch" placeholder="Search...">
+                            <button class="btn-primary" onclick="openModal('department')">+ Add</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Name</th><th>Description</th><th>Courses</th><th>Instructors</th><th>Actions</th></tr></thead>
+                        <tbody id="departmentsBody"></tbody>
+                    </table>
+                    <div class="pagination" id="departmentsPagination"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<!-- ===== Modal ===== -->
+<div id="modalOverlay" class="modal-overlay" style="display:none">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 id="modalTitle">Add</h3>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer">
+            <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+            <button class="btn-primary" onclick="submitModal()" style="width:auto">Save</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Toast ===== -->
+<div id="toast" class="toast"></div>
+
+<script src="../assets/js/config.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/admin.js"></script>
+</body>
+</html>

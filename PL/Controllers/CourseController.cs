@@ -3,10 +3,12 @@ using EduVibe.DTOs.Course;
 using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
 using EduVibe.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EduVibe.Controllers;
 
 [ApiController]
+[Authorize(Roles ="Admin, Instructor")]
 [Route("api/[controller]")]
 public class CourseController : ControllerBase
 {
@@ -40,7 +42,7 @@ public class CourseController : ControllerBase
         return CreatedAtAction(nameof(GetCourse), new { id = created.Id }, created);
     }
 
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Course course)
     {
         if (id != course.Id) return BadRequest(new { message = "ID Mismatch" });

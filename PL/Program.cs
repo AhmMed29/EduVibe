@@ -4,15 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using EduVibe.Models.Entities;
 using EduVibe.Middlewares;
 using EduVibe.Services;
-using System.Security.Claims;
 using System.Text;
 using BLL.Interfaces;
 using BLL.Services;
 using BLL.Settings;
 using EduVibe.Interfaces;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.OpenApi;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EduVibe
@@ -25,7 +22,21 @@ namespace EduVibe
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-
+            builder.Services.AddSwaggerGen();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontEnd", policy =>
+                {
+                    policy.WithOrigins(
+                            "http://localhost:3000",
+                            "http://localhost:5173",
+                            "http://localhost:63342" 
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+            
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -100,6 +111,8 @@ namespace EduVibe
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseCors("AllowFrontEnd");
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

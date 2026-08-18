@@ -40,7 +40,7 @@ public class InstructorController : ControllerBase
         return CreatedAtAction(nameof(GetInstructor), new { id = created.Id }, created);
     }
 
-    [HttpPost("{id}")]
+    [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] Instructor instructor)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);

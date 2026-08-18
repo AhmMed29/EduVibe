@@ -18,7 +18,6 @@ public class AuthController : ControllerBase
         _authService  = authService;
     }
 
-    [AllowAnonymous]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
@@ -33,9 +32,26 @@ public class AuthController : ControllerBase
         }
     }
     
-    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginDto dto)
+    {
+        try
+        {
+            var result = await _authService.LoginAsync(dto);
+            return Ok(result);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while processing your request." });
+        }
+    }
+    
+    [HttpPost("forgetPassword")]
+    public async Task<IActionResult> Forget()
     {
         try
         {

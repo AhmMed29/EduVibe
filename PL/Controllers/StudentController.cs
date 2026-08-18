@@ -5,8 +5,8 @@ using EduVibe.Models.Entities;
 using Microsoft.AspNetCore.Authorization;
 namespace EduVibe.Controllers;
 
-[Authorize(Roles ="Admin")]
 [ApiController]
+[Authorize(Roles ="Admin")]
 [Route("api/[controller]")]
 public class StudentController : ControllerBase
 {

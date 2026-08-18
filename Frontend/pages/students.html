@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html lang="ar" dir="rtl">
+        <head>
+        <meta charset="UTF-8">
+        <title>الطلاب – EduVibe</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<h1>قائمة الطلاب</h1>
+
+<!-- الأدمن بس يشوف زر الإضافة -->
+<button class="admin-only" onclick="openAddModal()">+ إضافة طالب</button>
+
+<!-- جدول الطلاب هيتعبأ بالـ JavaScript -->
+<table id="studentsTable">
+    <thead>
+    <tr>
+        <th>الاسم</th>
+        <th>الإيميل</th>
+        <th>القسم</th>
+        <th class="admin-only">العمليات</th>
+    </tr>
+    </thead>
+    <tbody id="studentsBody">
+    <!-- البيانات هتجي من الـ API -->
+    </tbody>
+</table>
+
+<!-- تحميل ملفات الـ JS بالترتيب الصحيح -->
+<script src="../assets/js/utils.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script>
+    // أول ما الصفحة تفتح:
+    requireAuth();       // لو مش مسجل ارجعه للـ Login
+    hideIfNotAdmin();    // إخفاء العناصر حسب الـ Role
+    loadStudents();      // اجلب البيانات
+
+    async function loadStudents() {
+        const students = await StudentAPI.getAll();
+        const tbody = document.getElementById("studentsBody");
+
+        students.forEach(student => {
+            tbody.innerHTML += `
+                    <tr>
+                        <td>${student.firstName} ${student.lastName}</td>
+                        <td>${student.email}</td>
+                        <td>${student.departmentName}</td>
+                        <td class="admin-only">
+                            <button onclick="editStudent(${student.id})">✏️ تعديل</button>
+                            <button onclick="deleteStudent(${student.id})">🗑️ حذف</button>
+                        </td>
+                    </tr>
+                `;
+        });
+    }
+
+    async function deleteStudent(id) {
+        if (!confirm("هل أنت متأكد؟")) return;
+        await StudentAPI.delete(id);
+        await loadStudents(); // إعادة تحميل القائمة
+    }
+</script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>

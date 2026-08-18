@@ -11,6 +11,8 @@
 
 	<ItemGroup>
 		<None Remove="appsettings.json" />
+		<None Remove="Properties\PublishProfiles\Monster.pubxml" />
+		<None Remove="Properties\PublishProfiles\eduvibe.runasp.net-WebDeploy.publishSettings" />
 	</ItemGroup>
 
 	<ItemGroup>

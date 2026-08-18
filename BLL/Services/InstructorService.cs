@@ -113,6 +113,8 @@ public class InstructorService : IInstructorService
         instructor.DepartmentId = _instructor.DepartmentId;
         instructor.Address.City = _instructor.Address.City;
         instructor.Address.Country = _instructor.Address.Country;
+        instructor.DateOfBirth = _instructor.DateOfBirth;
+        instructor.Salary = _instructor.Salary;
 
         await _context.SaveChangesAsync();
     }

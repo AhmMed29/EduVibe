@@ -88,6 +88,9 @@ public class DepartmentService : IDepartmentService
             throw new NotFoundException($"Department with ID {id} not found.");
 
         existingDepartment.Name = department.Name;
+        existingDepartment.Description  = department.Description;
+        existingDepartment.Instructors = department.Instructors;
+        existingDepartment.Courses = department.Courses;
         existingDepartment.UpdatedAt = DateTime.Now;
 
         await _context.SaveChangesAsync();

@@ -29,6 +29,7 @@ packages/
 
 # User secrets & environment
 .env
+appsettings.json
 appsettings.Development.json
 secrets.json
 
@@ -41,6 +42,7 @@ log/
 publish/
 *.publish.xml
 *.pubxml.user
+*.pubxml
 
 # OS
 Thumbs.db
