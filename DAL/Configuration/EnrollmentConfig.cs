@@ -24,10 +24,6 @@ namespace EduVibe.Configuration
                 .HasColumnType("Int")
                 .IsRequired();
 
-            builder.Property(x => x.Grades)
-                .HasColumnType("Decimal(5,2)")
-                .HasDefaultValue(0);
-
             builder.HasOne(e => e.Student)
                 .WithMany(s => s.Enrollments)
                 .HasForeignKey(e => e.StudentId)

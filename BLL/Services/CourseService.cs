@@ -35,15 +35,13 @@ public class CourseService : ICourseService
         query = request.SortDirection.ToLower() == "desc"
             ? request.SortBy?.ToLower() switch
             {
-                "credits" => query.OrderByDescending(c => c.Credits),
-                "priceperhour" => query.OrderByDescending(c => c.PricePerHour),
+                "price" => query.OrderByDescending(c => c.Price),
                 "durationinhours" => query.OrderByDescending(c => c.DurationInHours),
                 _ => query.OrderByDescending(c => c.Title)
             }
             : request.SortBy?.ToLower() switch
             {
-                "credits" => query.OrderBy(c => c.Credits),
-                "priceperhour" => query.OrderBy(c => c.PricePerHour),
+                "price" => query.OrderBy(c => c.Price),
                 "durationinhours" => query.OrderBy(c => c.DurationInHours),
                 _ => query.OrderBy(c => c.Title)
             };
@@ -51,7 +49,6 @@ public class CourseService : ICourseService
         var totalRecords = await query.CountAsync();
 
         var courses = await query
-            .Include(s => s.CourseSchedules)
             .Include(s => s.Department)
             .Skip((request.PageNumber - 1) * request.PageSize)
             .Take(request.PageSize)
@@ -71,7 +68,6 @@ public class CourseService : ICourseService
     public async Task<CourseDto> GetByIdAsync(int id)
     {
         var course = await _context.Courses
-            .Include(s => s.CourseSchedules)
             .Include(s => s.Department)
             .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -95,14 +91,13 @@ public class CourseService : ICourseService
         if (existingCourse == null)
             throw new NotFoundException($"Course with ID {id} not found.");
 
-        course.UpdatedAt = DateTime.Now;
         existingCourse.Title = course.Title;
         existingCourse.DepartmentId = course.DepartmentId;
         existingCourse.Description = course.Description;
-        existingCourse.PricePerHour = course.PricePerHour;
-        existingCourse.CourseSchedules = course.CourseSchedules;
+        existingCourse.Price = course.Price;
+        existingCourse.CourseLevel = course.CourseLevel;
         existingCourse.DurationInHours = course.DurationInHours;
-        existingCourse.Credits = course.Credits;
+        existingCourse.UpdatedAt = DateTime.Now;
 
         await _context.SaveChangesAsync();
     }

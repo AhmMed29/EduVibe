@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+// this entity connecting the course table with the student table 
+// enrollments : The Courses That The student paid for.
 namespace EduVibe.Models.Entities
 {
     public class Enrollment
@@ -12,7 +8,6 @@ namespace EduVibe.Models.Entities
         public virtual Student Student { get; set; } = null!;
         public int CourseId { get; set; }
         public virtual Course Course { get; set; } = null!;
-        public decimal Grades { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

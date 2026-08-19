@@ -50,7 +50,7 @@ public class AuthController : ControllerBase
         }
     }
     
-    [HttpPost("forgetPassword")]
+    /*[HttpPost("forgetPassword")]
     public async Task<IActionResult> Forget()
     {
         try
@@ -66,5 +66,5 @@ public class AuthController : ControllerBase
         {
             return StatusCode(500, new { message = "An error occurred while processing your request." });
         }
-    }
+    }*/
 }

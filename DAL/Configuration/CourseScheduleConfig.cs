@@ -23,11 +23,6 @@ namespace EduVibe.Configuration
             builder.Property(cs => cs.EndTime)
                 .IsRequired()
                 .HasColumnType("time");
-
-            builder.HasOne(x=>x.Course)
-                .WithMany(x=>x.CourseSchedules)
-                .HasForeignKey(x=>x.CourseId)
-                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -33,7 +33,6 @@ namespace EduVibe.Data
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<Enrollment> Enrollments { get; set; }
         public virtual DbSet<Department> Departments { get; set; }
-        public virtual DbSet<CourseSchedule> CourseSchedules { get; set; }
         public DbSet<InstructorCourse> InstructorCourses { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
 
@@ -52,7 +51,7 @@ namespace EduVibe.Data
                 );
 
             modelBuilder.Entity<Course>()
-                .Property(c => c.PricePerHour)
+                .Property(c => c.Price)
                 .HasPrecision(18, 2);
         }
     }

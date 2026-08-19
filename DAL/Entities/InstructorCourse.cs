@@ -6,7 +6,7 @@ namespace EduVibe.Models.Entities
     {
         public int Id { get; set; }
 
-        public string InstructorId { get; set; } = null!;
+        public int InstructorId { get; set; } 
 
         public int CourseId { get; set; }
         public Course Course { get; set; } = null!;

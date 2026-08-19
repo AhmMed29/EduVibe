@@ -21,10 +21,16 @@ namespace EduVibe.Configuration
                 .IsRequired()
                 .HasMaxLength(500);
 
-            builder.Property(c=>c.Credits)
-                .HasColumnType("Int")
+            builder.Property(c => c.Price)
                 .IsRequired();
 
+            builder.Property(c => c.CourseLevel)
+                .HasColumnType("NVarchar")
+                .HasMaxLength(50)
+                .IsRequired();
+            
+            builder.Property(c => c.DurationInHours)
+                .HasColumnType("int");
         }
     }
 }

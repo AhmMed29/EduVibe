@@ -24,11 +24,9 @@ public class AutoMapperProfile : Profile
 
         CreateMap<Enrollment, EnrollmentDto>()
             .ForMember(dto => dto.CourseTitle, opt => opt.MapFrom(e => e.Course != null ? e.Course.Title : string.Empty))
-            .ForMember(dto => dto.Credits, opt => opt.MapFrom(e => e.Course != null ? e.Course.Credits : 0))
-            .ForMember(dto => dto.EnrolledAt, opt => opt.MapFrom(e => e.CreatedAt));
-
-        CreateMap<CourseSchedule, CourseScheduleDto>();
-
+            .ForMember(dto => dto.EnrolledAt, opt => opt.MapFrom(e => e.CreatedAt))
+            .ForMember(dto => dto.CourseLevel, opt => opt.MapFrom(e => e.Course != null ? e.Course.CourseLevel : string.Empty));
+        
         CreateMap<Course, CourseDto>()
             .ForMember(dto => dto.DepartmentName, opt => opt.MapFrom(e => e.Department != null ? e.Department.Name : null));
 
