@@ -2,12 +2,14 @@
 
 namespace EduVibe.DTOs.Account;
 
-public class reset_password
+public class ConfirmResetDto
 {
     [Required]
     public string Email { get; set; }
+
+    [Required]
+    public string NewPassword { get; set; }
     
     [Required]
-    public string Password { get; set; }
-    
+    public string Token { get; set; }
 }

@@ -50,13 +50,13 @@ public class AuthController : ControllerBase
         }
     }
     
-    /*[HttpPost("forgetPassword")]
-    public async Task<IActionResult> Forget()
+    [HttpPost("password-reset")]
+    public async Task<IActionResult> PasswordReset([FromBody] RequestResetDto dto)
     {
         try
         {
-            var result = await _authService.LoginAsync(dto);
-            return Ok(result);
+            await _authService.RequestResetAsync(dto);
+            return Ok(new {message = "Check your email."});
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -64,7 +64,25 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return StatusCode(500, new { message = "An error occurred while processing your request." });
+            return StatusCode(500, new { message = $"An error occurred." });
         }
-    }*/
+    }
+    
+    [HttpPost("confirm-reset")]
+    public async Task<IActionResult> ConfirmReset([FromBody] ConfirmResetDto dto)
+    {
+        try
+        {
+            await _authService.ConfirmResetAsync(dto);
+            return  Ok(new { message = "Password Reset Successfully."});
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = $"An error occurred." });
+        }
+    }
 }

@@ -3,6 +3,7 @@ using BLL.Settings;
 using EduVibe.DTOs.Account;
 using EduVibe.Models.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 
 namespace BLL.Services;
@@ -12,15 +13,18 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITokenService _tokenService; 
     private readonly IOptions<JwtSettings> _jwtSettings;
+    private readonly IEmailSender _emailSender;
     private static readonly string[] AllowedPublicRoles = { "Student", "Instructor" };
 
     public AuthService(UserManager<ApplicationUser> userManager
         , ITokenService tokenService
-        , IOptions<JwtSettings> jwtSettings)   
+        , IOptions<JwtSettings> jwtSettings
+        , IEmailSender emailSender)   
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _jwtSettings = jwtSettings;
+        _emailSender = emailSender;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -84,5 +88,32 @@ public class AuthService : IAuthService
             UserName = user.UserName,
             Roles = roles.ToList()
         };
+    }
+    
+    // Remember : TASK return NOTHING ! VOID.
+    public async Task RequestResetAsync(RequestResetDto dto)
+    {
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        if (user == null)
+            throw new UnauthorizedAccessException("Email Not Found Try Entering it again.");
+        
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        
+        // subject : the (Title) Of the EMAIL MESSAGE 
+        await _emailSender.SendEmailAsync(dto.Email, "Reset Password Request", $"Use This Token {token} To Reset YOur Password.");
+    }
+
+    public async Task ConfirmResetAsync(ConfirmResetDto dto)
+    {
+        var user = await _userManager.FindByEmailAsync(dto.Email);
+        if (user == null)
+            throw new UnauthorizedAccessException("Email Not Found.");
+        
+        var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
+        if (!result.Succeeded)
+        {
+            var errors = string.Join(", ", result.Errors.Select(x => x.Description));
+            throw new Exception($"Password reset Failed: {errors}");
+        }
     }
 }

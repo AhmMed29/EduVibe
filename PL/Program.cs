@@ -10,6 +10,7 @@ using BLL.Services;
 using BLL.Settings;
 using EduVibe.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EduVibe
@@ -49,7 +50,7 @@ namespace EduVibe
             builder.Services.AddScoped<IInstructorService, InstructorService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             
-            //builder.Services.AddTransient<IEmailSender, EmailSender>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
             var jwtKey = builder.Configuration["Jwt:Key"];

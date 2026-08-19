@@ -32,6 +32,8 @@ async function apiRequest(endpoint, method = "GET", body = null) {
 const AuthAPI = {
     login: (email, password) => apiRequest("/auth/login", "POST", { email, password }),
     register: (data) => apiRequest("/auth/register", "POST", data),
+    requestPasswordReset: (email) => apiRequest("/auth/password-reset", "POST", { email }),
+    confirmReset: (email, token, newPassword) => apiRequest("/auth/confirm-reset", "POST", { email, token, newPassword }),
 };
 
 // Student Endpoints
