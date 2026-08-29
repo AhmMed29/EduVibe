@@ -1,55 +1,111 @@
-﻿<!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<!DOCTYPE html>
+<html lang="en" style="">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduVibe - Student Management System</title>
-    <link rel="stylesheet" href="assets/css/main.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>EduVibe — A New Era of learning</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
     <style>
-        .hero {
-            text-align: center;
-            padding: 60px 20px;
-        }
-        .hero h1 {
-            font-size: 48px;
-            color: #1a1a2e;
-            margin-bottom: 16px;
-        }
-        .hero p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 32px;
-        }
-        .hero-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-        }
-        .btn-secondary {
-            padding: 14px 32px;
-            background: white;
-            color: #5b5fc7;
-            border: 2px solid #5b5fc7;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn-secondary:hover {
-            background: #f0f0ff;
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        /* <!-- ZOOOOOOOOOM --> */
+        body{font-family:'Inter',sans-serif;color:#0F0F14;background:#fff;overflow-x:hidden;zoom:1.3}
+        a{text-decoration:none;color:inherit}
+        button{font-family:inherit;cursor:pointer}
+        .container{width:100%;padding:0 30px;margin:auto}
+        .navbar{height:68px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #EFEFF6;background:#fff;position:sticky;top:0;z-index:10}
+        .logo{font-weight:800;font-size:25px;display:flex;gap:8px;align-items:center}
+        .logo::before{content:"✦";color:#4F46FF;font-size:25px}
+        .logo span{color:#4F46FF}
+        .nav{display:flex;gap:28px;color:#4B5563;font-size:13px;font-weight:600}
+        .nav a.active{color:#0F0F14;font-weight:700}
+        .hero{display:grid;grid-template-columns:1fr 1.05fr;gap:20px;align-items:center;padding:28px 0 10px}
+        .badge{display:inline-flex;gap:6px;align-items:center;background:#EDEBFF;color:#4F46FF;font-size:11px;font-weight:700;padding:6px 10px;border-radius:20px;letter-spacing:.3px}
+        .badge::before{content:"✦"}
+        .hero h1{font-size:48px;line-height:1.05;font-weight:800;letter-spacing:-1.6px;margin-top:14px}
+        .hero h1 span{color:#4F46FF}
+        .hero p{color:#6B7280;font-size:16px;line-height:1.7;margin-top:14px;max-width:520px}
+        .btns{display:flex;gap:12px;margin-top:20px}
+        .btn{height:44px;padding:0 18px;border-radius:10px;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:8px;border:1px solid #E5E7EB}
+        .btn-primary{background:#4F46FF;color:#fff;box-shadow:0 10px 20px rgba(79,70,255,.22);border-color:#4F46FF}
+        .btn-outline{background:#fff;color:#0F0F14}
+        .mini3{display:flex;gap:12px;margin-top:22px}
+        .mini3>div{flex:1;background:#fff;border:1px solid #EDEBFF;border-radius:12px;padding:12px;display:flex;gap:10px;align-items:center}
+        .mini3>div:nth-child(1){background:#F5F3FF}
+        .mini3>div:nth-child(2){background:#EFF6FF}
+        .mini3>div:nth-child(3){background:#FFF1F2}
+        .mini3 i{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:16px;flex-shrink:0}
+        .mini3 b{font-size:13px}
+        .mini3 span{font-size:12px;color:#6B7280}
+        .hero-right{position:relative;height:560px;display:flex;align-items:end;justify-content:center}
+        /* The Circe behind the student */
+        .circle{position:absolute;width:850px;height:850px;background:#F5F3FF;border-radius:50%;top:50px;right:-450px;z-index:0}
+        .hero-right img{position:relative;z-index:1;width:420px;max-width:90%;height:auto;object-fit:contain;object-position:center bottom}
+        .star{position:absolute;color:#4F46FF;font-size:12px;z-index:2}
+        .why{margin-top:18px;background:#F8F7FF;border-radius:20px;padding:28px 18px;text-align:center}
+        .why .eyebrow{color:#4F46FF;font-size:12px;font-weight:800;letter-spacing:.6px}
+        .why .eyebrow::before{content:"✦ "}
+        .why h2{font-size:26px;font-weight:800;margin-top:6px}
+        .why p{color:#6B7280;font-size:14px;margin-top:6px}
+        .why-grid{margin-top:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:left}
+        .why-card{background:#fff;border:1px solid #EDEBFF;border-radius:12px;padding:14px}
+        .why-card i{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;font-size:14px;margin-bottom:10px}
+        .why-card b{font-size:14px}
+        .why-card span{font-size:13px;color:#6B7280;display:block;margin-top:4px;line-height:1.5}
+        @media(max-width:1000px){.hero{grid-template-columns:1fr}.hero-right{height:420px}.circle{width:360px;height:360px;right:50%;transform:translateX(50%)}.why-grid{grid-template-columns:1fr 1fr}.nav{display:none}}
+        @media(max-width:600px){.hero h1{font-size:36px}.btns{flex-direction:column}.mini3{flex-direction:column}.why-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-<div class="hero">
-    <h1>EduVibe</h1>
-    <p>Student Management System</p>
-    <div class="hero-buttons">
-        <a href="pages/login.html" class="btn-primary">Sign In</a>
-        <a href="pages/register.html" class="btn-secondary">Sign Up</a>
-    </div>
+<div class="container">
+    <nav class="navbar">
+        <div class="logo">
+            <div>Edu<span>Vibe</span></div>
+        </div>
+        <div class="nav">
+            <!-- write here : Home, Features, Pricing, ...  -->
+        </div>
+        <div style="display:flex;gap:10px">
+            <a href="pages/login.html" class="btn btn-outline" style="font-size:15px;font-weight:700;padding:8px 14px" class="">Sign In</a>
+            <a href="pages/register.html" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+    <section class="hero">
+        <div>
+            <h1 class="">Empower education.<br>Connect every role.<br>Build a <span class="">better future.</span></h1>
+            <p class="">EduVibe brings students, teachers, and administrators together in one smart platform. Manage courses, track progress, organize classes, and make data-driven decisions — all in one place.</p>
+            <div class="btns">
+                <a href="pages/register.html" class="btn btn-primary">SignUp for Free</a>
+                <a href="pages/courses.html" class="btn btn-outline">Explore Our Courses →</a>
+            </div>
+            <!--
+            <div class="mini3">
+                <div><i style="background:#EDEBFF">↪</i><div><b>For Students</b><br><span class="">Study smarter</span></div></div>
+                <div><i style="background:#DBEAFE">∑</i><div><b>For Teachers</b><br><span class="">Teach easier</span></div></div>
+                <div><i style="background:#FFE4E6">©</i><div><b>For Admins</b><br><span class="">Manage better</span></div></div>
+            </div>
+            -->
+        </div>
+
+        <div class="hero-right">
+            <div class="circle"></div>
+            <span class="star" style="top:80px;right:40px;font-size:50px">✦</span>
+            <span class="star" style="bottom:120px;left:60px;font-size:70px">✦</span>
+            <span class="star" style="bottom:40px;right:70px;font-size:25px">✦</span>
+            <img src="assets/images/EduVibe-sign-up-nobackground-cropped.png" alt="EduVibe Student">
+        </div>
+    </section>
+
+    <section class="why">
+        <div class="eyebrow">WHY EDUVIBE?</div>
+        <h2 class="">Everything you need in one platform</h2>
+        <p class="">Powerful features for students, teachers, and administrators</p>
+        <div class="why-grid">
+            <div class="why-card"><b>Centralized Management</b><span class="">Manage all your educational operations from one place.</span></div>
+            <div class="why-card"><b>Real-time Analytics</b><span class="">Get instant insights and make data-driven decisions.</span></div>
+            <div class="why-card"><b>Easy Communication (قريب إن شاء الله)</b><span class="">Connect and Chat with students and staff seamlessly.</span></div>
+            <div class="why-card"><b>Secure &amp; Reliable</b><span class="">Your data is safe with enterprise-grade security.</span></div>
+        </div>
+    </section>
 </div>
 </body>
 </html>

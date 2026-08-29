@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructors - EduVibe</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}
+        body{background:#f0f4f9;color:#1a1a2e}
+        a{text-decoration:none}
+        .layout{display:flex;min-height:100vh}
+        .sidebar{width:250px;background:#fff;border-right:1px solid #e6eef7;position:fixed;inset:0 auto 0 0;padding:20px 14px;display:flex;flex-direction:column;z-index:10}
+        .logo{font-weight:800;font-size:20px;color:#7c5cff;display:flex;align-items:center;gap:8px}
+        .logo span{color:#1a1a2e}
+        .nav{margin-top:24px;display:flex;flex-direction:column;gap:4px}
+        .nav a{padding:11px 14px;border-radius:10px;color:#6b7280;font-weight:600;font-size:13.5px;display:flex;gap:10px;align-items:center;cursor:pointer}
+        .nav a.active{background:#7c5cff;color:#fff}
+        .nav a:hover:not(.active){background:#f3f0ff;color:#7c5cff}
+        .main{flex:1;margin-left:250px;padding:24px;background:#f0f4f9}
+        .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+        .topbar h1{font-size:22px}
+        .search{padding:10px 14px;border:1px solid #e5e7eb;border-radius:10px;width:280px;background:#fff}
+        /* Instructors grid - style #92 */
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+        .inst-card{background:#fff;border-radius:16px;padding:16px;border:1px solid #eef2f7;box-shadow:0 4px 14px rgba(0,0,0,.04);cursor:pointer;transition:.15s;border-top:3px solid #7c5cff}
+        .inst-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(124,92,255,.12)}
+        .inst-card .head{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#6b7280}
+        .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700}
+        .badge.active{background:#e6f9ed;color:#0a7a2e}
+        .badge.over{background:#fff1e6;color:#b45309}
+        .inst-card h3{margin:12px 0 4px;font-size:15px}
+        .inst-card .sub{font-size:12px;color:#9aa0b3;margin-bottom:14px}
+        .bar{height:6px;background:#f1f5f9;border-radius:99px;overflow:hidden;margin:10px 0}
+        .bar i{display:block;height:100%;background:#7c5cff;border-radius:99px}
+        .foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid #f1f5f9}
+        .person{display:flex;gap:8px;align-items:center}
+        .person img{width:32px;height:32px;border-radius:50%;object-fit:cover}
+        .person b{font-size:12px} .person span{font-size:11px;color:#9aa0b3}
+        .arrow{width:32px;height:32px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:14px}
+        /* Profile view - Jayden style */
+        .profile-view{display:none}
+        .back{margin-bottom:16px;color:#7c5cff;font-weight:700;cursor:pointer;display:inline-flex;gap:6px}
+        .profile-layout{display:grid;grid-template-columns:320px 1fr;gap:16px}
+        .left-card,.right-card{background:#fff;border-radius:16px;border:1px solid #eef2f7;padding:18px}
+        .avatar-wrap{text-align:center;border-bottom:1px solid #f1f5f9;padding-bottom:16px;margin-bottom:16px}
+        .avatar-wrap img{width:96px;height:96px;border-radius:50%;object-fit:cover;border:4px solid #e8f0ff;outline:3px solid #7c5cff}
+        .avatar-wrap h2{margin:10px 0 2px;font-size:17px}
+        .avatar-wrap p{font-size:12px;color:#9aa0b3}
+        .btn-row{display:flex;gap:8px;justify-content:center;margin-top:12px}
+        .btn-text,.btn-email{flex:1;padding:8px;border-radius:20px;border:1px solid #e5e7eb;background:#fff;font-weight:700;font-size:12px;cursor:pointer;display:flex;gap:6px;justify-content:center;align-items:center}
+        .btn-email{background:#f3f0ff;border-color:#7c5cff;color:#7c5cff}
+        .dem h4{font-size:13px;margin:14px 0 8px;color:#1a1a2e}
+        .dem-row{display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px dashed #f1f5f9}
+        .dem-row span:first-child{color:#9aa0b3}
+        .dem-row span:last-child{font-weight:600}
+        .schedule{margin-top:14px}
+        .donut{width:90px;height:90px;border-radius:50%;background:conic-gradient(#7c5cff 0 70%, #ffce45 70% 90%, #ff6b6b 90% 100%);display:grid;place-items:center;margin:10px auto;position:relative}
+        .donut::after{content:'';position:absolute;width:62px;height:62px;background:#fff;border-radius:50%}
+        .legend{display:flex;gap:10px;justify-content:center;font-size:11px}
+        .legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+        /* Right */
+        .stats-top{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+        .stat{background:#fff;border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;border:1px solid #eef2f7}
+        .stat-icon{width:44px;height:44px;border-radius:10px;display:grid;place-items:center;font-size:20px}
+        .tabs{display:flex;gap:18px;border-bottom:1px solid #eef2f7;margin:10px 0;overflow:auto}
+        .tabs a{padding:10px 4px;font-size:13px;font-weight:600;color:#9aa0b3;white-space:nowrap;border-bottom:2px solid transparent;cursor:pointer}
+        .tabs a.active{color:#7c5cff;border-color:#7c5cff}
+        .subtabs{display:flex;gap:14px;overflow:auto;padding:6px 0}
+        .subtabs a{font-size:12px;padding:6px 10px;border-radius:20px;background:#f1f5f9;color:#6b7280;white-space:nowrap}
+        .subtabs a.active{background:#7c5cff;color:#fff}
+        .table-wrap{overflow:auto;margin-top:10px}
+        table{width:100%;border-collapse:collapse;font-size:12px}
+        th{color:#9aa0b3;font-weight:600;text-align:left;padding:10px 8px;border-bottom:1px solid #eef2f7;white-space:nowrap}
+        td{padding:10px 8px;border-bottom:1px solid #f8fafc}
+        /* UStudy graphs placeholder */
+        .graphs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+        .graph-card{background:#fff;border-radius:14px;padding:16px;border:1px solid #eef2f7}
+        .graph-card h4{font-size:13px;margin-bottom:10px;display:flex;justify-content:space-between}
+        .placeholder{height:160px;background:repeating-linear-gradient(90deg,#f8f7ff 0 40px,#fff 40px 41px);border-radius:10px;display:grid;place-items:center;color:#9aa0b3;font-size:12px;border:1px dashed #e0d8ff}
+        .placeholder-bar{display:flex;align-items:end;gap:6px;height:120px;justify-content:center}
+        .placeholder-bar i{width:18px;background:#c4b5fd;border-radius:6px 6px 0 0;display:block}
+        @media(max-width:900px){.profile-layout{grid-template-columns:1fr}.graphs{grid-template-columns:1fr}.stats-top{grid-template-columns:1fr}.main{margin-left:0}.sidebar{display:none}}
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">◆ U<span>Study</span></div>
+        <nav class="nav">
+            <a class="active">👨‍🏫 Teachers</a>
+            <a onclick="location.href='courses.html'">📚 Course</a>
+            <a>🎓 Students</a>
+            <a>💬 Chat</a>
+            <a onclick="location.href='admin.html'">📊 Dashboard</a>
+        </nav>
+    </aside>
+    <main class="main">
+        <div class="topbar">
+            <h1 id="pageTitle">Instructors</h1>
+            <input class="search" id="searchInp" placeholder="Search instructor..." oninput="filterInstructors()">
+        </div>
+
+        <!-- LIST VIEW -->
+        <div id="listView">
+            <div class="grid" id="instructorsGrid"></div>
+        </div>
+
+        <!-- PROFILE VIEW - Jayden Design -->
+        <div id="profileView" class="profile-view">
+            <span class="back" onclick="showList()">← Back to instructors</span>
+            <div class="profile-layout">
+                <!-- Left: Demographics -->
+                <div class="left-card">
+                    <div class="avatar-wrap">
+                        <img id="pImg" src="https://i.pravatar.cc/200?img=12" alt="">
+                        <h2 id="pName">Jayden Mullins</h2>
+                        <p id="pMeta">Part Time: 092290940 • Medical Specialist</p>
+                        <div class="btn-row">
+                            <button class="btn-text" onclick="alert('Chat coming soon')">💬 TEXT</button>
+                            <button class="btn-email" onclick="location.href='mailto:'+document.getElementById('pEmail').textContent">✉ EMAIL</button>
+                        </div>
+                    </div>
+                    <div class="dem">
+                        <h4>Demographics</h4>
+                        <div class="dem-row"><span>Gender</span><span id="pGender">Male</span></div>
+                        <div class="dem-row"><span>DOB</span><span>05/12/1993</span></div>
+                        <div class="dem-row"><span>Age</span><span>28</span></div>
+                        <div class="dem-row"><span>Hire Date</span><span>12/09/2019</span></div>
+                        <div class="dem-row"><span>Department</span><span id="pDept">Dermatology</span></div>
+                        <div class="dem-row"><span>Location</span><span>Jannieborough</span></div>
+                        <div class="dem-row"><span>Position</span><span>Medical Specialist</span></div>
+                        <div class="dem-row"><span>Supervisor</span><span>Mason Jensen</span></div>
+                        <div class="dem-row"><span>Email</span><span id="pEmail">jayden@eduvibe.com</span></div>
+                        <h4>Schedule</h4>
+                        <div class="donut"></div>
+                        <div class="legend"><span><i style="background:#7c5cff"></i> Late 70%</span><span><i style="background:#ffce45"></i> No Show 20%</span><span><i style="background:#ff6b6b"></i> Sick 5%</span></div>
+                        <div class="dem-row"><span>Shift</span><span>2nd</span></div>
+                        <div class="dem-row"><span>Hourly</span><span>$ 42/h</span></div>
+                    </div>
+                </div>
+
+                <!-- Right: Stats + Results + Graphs -->
+                <div>
+                    <div class="stats-top">
+                        <div class="stat"><div class="stat-icon" style="background:#e8f0ff">👔</div><div><div style="font-size:11px;color:#9aa0b3">Employment</div><b id="pCourses">10</b> <span style="font-size:11px;color:#9aa0b3">Courses</span></div></div>
+                        <div class="stat"><div class="stat-icon" style="background:#f3e8ff">♾️</div><div><div style="font-size:11px;color:#9aa0b3">Rating</div><b>4.9</b> <span style="font-size:11px">★</span></div></div>
+                        <div class="stat"><div class="stat-icon" style="background:#ffe8ec">🏃</div><div><div style="font-size:11px;color:#9aa0b3">Students</div><b>1,240</b></div></div>
+                    </div>
+
+                    <div class="right-card">
+                        <div class="tabs">
+                            <a class="active">Results</a><a>Work Status</a><a>Documents</a><a>Notes</a><a>Others</a>
+                        </div>
+                        <div class="subtabs">
+                            <a class="active">Drug Screens</a><a>Breath Alcohol</a><a>Audiogram</a><a>Pulmonary</a><a>Vaccines</a>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th>DATE</th><th>TYPE</th><th>DESCRIPTION</th><th>RESULTS</th></tr></thead>
+                                <tbody>
+                                <tr><td>12/03/2020</td><td>Type Name</td><td>Demo text dolor sit amet</td><td>4.79</td></tr>
+                                <tr><td>12/03/2020</td><td>Type Name</td><td>Lorem ipsum dolor sit</td><td>4.79</td></tr>
+                                <tr><td>12/03/2020</td><td>Type Name</td><td>Consetetur sadipscing</td><td>4.79</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- UStudy Graphs - فاضية حاليا -->
+                        <div class="graphs">
+                            <div class="graph-card">
+                                <h4>Overview <span style="font-size:11px;color:#22c55e">▴ 33%</span></h4>
+                                <div class="placeholder">
+                                    <div class="placeholder-bar">
+                                        <i style="height:50px"></i><i style="height:80px"></i><i style="height:45px"></i><i style="height:100px;background:#7c5cff"></i><i style="height:60px"></i><i style="height:90px"></i>
+                                    </div>
+                                </div>
+                                <p style="font-size:11px;color:#9aa0b3;text-align:center;margin-top:6px">Empty for now - will show courses activity</p>
+                            </div>
+                            <div class="graph-card">
+                                <h4>Student Analysis <span style="font-size:11px;color:#7c5cff">3.5%</span></h4>
+                                <div class="placeholder" style="background:#f0f9ff;border-color:#dbeafe">Enrolled: 5,567 &nbsp; Left: 98 — (empty chart placeholder)</div>
+                                <p style="font-size:11px;color:#9aa0b3;text-align:center;margin-top:6px">Empty for now</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+    // Demo data - اربطه بـ API بعدين
+    const instructors=[
+        {name:"Darrell Steward",dept:"CS",img:"https://i.pravatar.cc/150?img=11",email:"darrell@eduvibe.com",courses:12,status:"Active"},
+        {name:"Darlene Fox",dept:"Design",img:"https://i.pravatar.cc/150?img=5",email:"darlene@eduvibe.com",courses:8,status:"Active"},
+        {name:"Floyd Miles",dept:"Medical",img:"https://i.pravatar.cc/150?img=8",email:"floyd@eduvibe.com",courses:10,status:"Active"},
+        {name:"Ralph Edwards",dept:"Engineering",img:"https://i.pravatar.cc/150?img=12",email:"ralph@eduvibe.com",courses:6,status:"Active"},
+        {name:"Jayden Mullins",dept:"Dermatology",img:"https://i.pravatar.cc/150?img=15",email:"jayden@eduvibe.com",courses:10,status:"Active"},
+        {name:"Courtney Henry",dept:"Math",img:"https://i.pravatar.cc/150?img=32",email:"courtney@eduvibe.com",courses:15,status:"Active"},
+    ];
+    function render(list){
+        document.getElementById('instructorsGrid').innerHTML=list.map((x,i)=>`
+<div class="inst-card" onclick="openProfile(${i})">
+<div class="head"><span>#${92+i} • ${x.status}</span><span class="badge active">${x.status}</span></div>
+<h3>${x.name} (${x.courses}x)</h3>
+<div class="sub">${x.dept} • ${x.courses} Courses • 4.8 ★</div>
+<div class="bar"><i style="width:${60+i*5}%"></i></div>
+<div class="foot">
+<div class="person"><img src="${x.img}"><div><b>${x.name}</b><br><span>${x.dept}</span></div></div>
+<div class="arrow">→</div>
+</div>
+</div>`).join('');
+    }
+    function openProfile(i){
+        const x=instructors[i];
+        document.getElementById('pName').textContent=x.name;
+        document.getElementById('pImg').src=x.img;
+        document.getElementById('pEmail').textContent=x.email;
+        document.getElementById('pDept').textContent=x.dept;
+        document.getElementById('pCourses').textContent=x.courses;
+        document.getElementById('listView').style.display='none';
+        document.getElementById('profileView').style.display='block';
+        document.getElementById('pageTitle').textContent=x.name;
+        window.scrollTo(0,0);
+    }
+    function showList(){
+        document.getElementById('profileView').style.display='none';
+        document.getElementById('listView').style.display='block';
+        document.getElementById('pageTitle').textContent='Instructors';
+    }
+    function filterInstructors(){
+        const q=document.getElementById('searchInp').value.toLowerCase();
+        render(instructors.filter(x=>x.name.toLowerCase().includes(q)||x.dept.toLowerCase().includes(q)));
+    }
+    render(instructors);
+    // TODO: استبدل الـ demo بـ fetch('/api/instructors') بعدين
+</script>
+</body>
+</html>

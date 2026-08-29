@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVibe — Student</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, sans-serif; }
+        body { background:#ffffff; color:#1A1A1A; }
+        :root { --accent:#4A70A9; --panel:#ffffff; --text:#1A1A1A; --border:#D6E4F0; --muted:#4A70A9; --mint:#3EAF6E; }
+        [dir="rtl"] { text-align:right; }
+
+        .layout { display:flex; min-height:100vh; }
+        .sidebar { width:230px; background:var(--panel); border-inline-end:1px solid var(--border); position:fixed; inset-block:0; inset-inline-start:0; z-index:40; display:flex; flex-direction:column; }
+        .logo { padding:22px 22px 14px; font-weight:800; font-size:17px; }
+        .nav { flex:1; padding:10px 14px; display:flex; flex-direction:column; gap:4px; }
+        .nav-link { display:flex; align-items:center; gap:11px; padding:10px 13px; font-size:13.5px; font-weight:600; color:var(--muted); cursor:pointer; transition:background .15s; }
+        .nav-link:hover { background:#EFECE3; }
+        .nav-link.active { background:var(--accent); color:#fff; }
+        .main { flex:1; margin-inline-start:230px; display:flex; flex-direction:column; min-height:100vh; }
+        .topbar { display:flex; justify-content:space-between; align-items:center; padding:13px 22px; background:var(--panel); border-bottom:1px solid var(--border); position:sticky; top:0; z-index:30; }
+        .content { flex:1; padding:24px; }
+        .card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+        .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; }
+        .course-btn { padding:9px; border-radius:9px; border:none; cursor:pointer; font-size:12.5px; font-weight:600; color:#fff; background:var(--accent); transition:background .15s; }
+        .course-btn:hover { background:#3A5A88; }
+    </style>
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="logo">EduVibe</div>
+        <nav class="nav">
+            <a class="nav-link active" data-section="my-courses">My Courses</a>
+            <a class="nav-link" data-section="browse">Browse Courses</a>
+            <a class="nav-link" data-section="settings">Settings</a>
+        </nav>
+    </aside>
+    <main class="main">
+        <header class="topbar">
+            <h1 id="pageTitle">My Courses</h1>
+            <div>
+                <button class="lang-btn" id="langBtn">عربي</button>
+            </div>
+        </header>
+        <div class="content">
+            <section id="section-my-courses" class="section" style="display:block">
+                <div class="card">
+                    <h2>My Courses</h2>
+                    <div class="grid" id="myGrid"></div>
+                </div>
+            </section>
+            <section id="section-browse" class="section">
+                <div class="card">
+                    <h2>Browse Courses</h2>
+                    <div class="grid" id="browseGrid"></div>
+                </div>
+            </section>
+            <section id="section-settings" class="section">
+                <div class="card">
+                    <h2>Profile Settings</h2>
+                    <!-- Settings content here -->
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+<script>
+    // Add JavaScript code for language switching and section switching here
+</script>
+</body>
+</html>

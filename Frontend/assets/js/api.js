@@ -19,14 +19,18 @@ async function apiRequest(endpoint, method = "GET", body = null) {
 
     const response = await fetch(`${API_BASE}${endpoint}`, config);
 
-    if (response.status === 401) {
+    if (response.status === 401 && token) {
         localStorage.removeItem("accessToken");
         window.location.href = "login.html";
         return;
     }
 
     const text = await response.text();
-    return text ? JSON.parse(text) : null;
+    const data = text ? JSON.parse(text) : null;
+
+    if (data) data.status = response.status;
+
+    return data;
 }
 
 const AuthAPI = {

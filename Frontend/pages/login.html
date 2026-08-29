@@ -1,87 +1,89 @@
 ﻿<!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - EduVibe</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sign In - EduVibe</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter','Segoe UI',Tahoma,sans-serif}
+        body{min-height:100vh;background:#f2f0ff;display:flex;align-items:center;justify-content:center;padding:24px}
+        .shell{width:100%;max-width:980px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(80,60,180,.18);display:grid;grid-template-columns:440px 1fr;overflow:hidden;padding:14px;gap:14px;align-items:stretch}
+        .left{position:relative;border-radius:16px;overflow:hidden;background:#0f0e1a;aspect-ratio:4/5.2}
+        .left img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+        .left::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.06) 0%,rgba(20,10,80,.12) 40%,rgba(10,10,30,.78) 100%)}
+        .star{position:absolute;top:16px;left:16px;z-index:2;color:#fff;font-size:20px;font-weight:900;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+        .left-text{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:20px;color:#fff}
+        .left-text .small{font-size:11px;opacity:.9;margin-bottom:8px}
+        .left-text h2{font-size:19px;line-height:1.35;font-weight:800}
+        .right{padding:22px 26px;display:flex;align-items:center}
+        .box{width:100%;max-width:380px;margin:0 auto}
+        .brand-star{color:#4f46ff;font-size:16px;font-weight:900;margin-bottom:6px}
+        .box h1{font-size:22px;font-weight:800;color:#111827}
+        .box p.sub{font-size:11.5px;color:#9aa0b3;margin:6px 0 18px;line-height:1.5}
+        label{font-size:11.5px;font-weight:600;color:#1f2937;display:block;margin-bottom:6px}
+        input{width:100%;padding:11px 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:13px;background:#fff;outline:none}
+        input::placeholder{color:#b8bec9}
+        input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+        .fg{margin-bottom:14px;position:relative}
+        .eye{position:absolute;right:10px;top:33px;background:none;border:none;cursor:pointer;color:#9aa0b3}
+        .row{display:flex;justify-content:space-between;align-items:center;margin:6px 0 14px;font-size:12px}
+        .row label{margin:0;display:flex;gap:6px;align-items:center;font-weight:500;color:#4b5563;cursor:pointer}
+        .row a{color:#4338ff;font-weight:600;text-decoration:none}
+        .row a:hover{text-decoration:underline}
+        .btn{width:100%;height:46px;padding:13px;background:#4338ff;color:#fff;border:none;border-radius:10px;font-weight:800;font-size:14.5px;cursor:pointer;box-shadow:0 10px 20px rgba(67,56,255,.28)}
+        .btn:disabled{opacity:.6;cursor:not-allowed}
+        .error{background:#fff1f2;color:#e11d48;padding:10px;border-radius:8px;font-size:12px;display:none;margin-bottom:12px;border:1px solid #ffe4e6}
+        .divider{display:flex;align-items:center;gap:10px;color:#9aa0b3;font-size:11px;margin:16px 0}
+        .divider::before,.divider::after{content:'';flex:1;height:1px;background:#e5e7eb}
+        .social{display:flex;gap:10px}
+        .social button{flex:1;height:42px;border:1px solid #e5e7eb;background:#f3f4f6;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;display:grid;place-items:center;color:#4b5563}
+        .social button:hover{background:#eef2ff;border-color:#c7d2fe;color:#4338ff}
+        .bottom{font-size:11.5px;color:#9aa0b3;text-align:center;margin-top:14px}
+        .bottom a{color:#4338ff;font-weight:700;text-decoration:none}
+        @media(max-width:900px){.shell{grid-template-columns:1fr;max-width:480px}.left{aspect-ratio:16/10;min-height:260px}.right{padding:18px}}
+    </style>
 </head>
 <body>
-<div class="login-container">
-    <div class="login-header">
-        <h1>Welcome Back</h1>
-        <p>Sign in to your EduVibe account</p>
+<div class="shell">
+    <div class="left">
+        <img class="bg" src="../assets/images/EduVibe-sign-up.png" alt="EduVibe">
+        <div class="star">✳</div>
+        <div class="left-text">
+            <div class="small">Welcome back to EduVibe</div>
+            <h2>Continue your journey — Learn, Connect and Grow with EduVibe</h2>
+        </div>
     </div>
-
-    <div id="errorMessage" class="error-message"></div>
-
-    <form id="loginForm">
-        <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="you@example.com" required>
+    <div class="right">
+        <div class="box">
+            <div class="brand-star">✳</div>
+            <h1>Let's Sign You In</h1>
+            <p class="sub">Welcome back! Access your courses and keep<br>your learning flowing in one place.</p>
+            <div id="errorMessage" class="error"></div>
+            <form id="loginForm" novalidate>
+                <div class="fg"><label for="email">Your email</label><input id="email" type="email" placeholder="example@gmail.com" required></div>
+                <div class="fg"><label for="password">Password</label><input id="password" type="password" placeholder="••••••••••••" required><button type="button" class="eye" onclick="toggle('password',this)">👁</button></div>
+                <div class="row">
+                    <label><input type="checkbox" id="rememberMe" style="width:14px;height:14px"> Remember me</label>
+                    <a href="forgot-password.html">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn">Sign In</button>
+            </form>
+            <div class="divider"><span>or continue with</span></div>
+            <div class="social"><button>Bē</button><button style="color:#4285F4">G</button><button style="color:#1877f2">f</button></div>
+            <div class="bottom">Don't have an account? <a href="register.html">Sign Up</a></div>
         </div>
-
-        <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password" required>
-        </div>
-
-        <div class="form-options">
-            <label class="remember-me">
-                <input type="checkbox" id="rememberMe">
-                Remember me
-            </label>
-            <a href="forgot-password.html" class="forgot-password">Forgot password?</a>
-        </div>
-
-        <button type="submit" class="btn-primary">Sign In</button>
-    </form>
-
-    <div class="divider">
-        <span>or continue with</span>
     </div>
-
-    <p class="signup-link">
-        Don't have an account? <a href="register.html">Sign Up</a>
-    </p>
 </div>
-
 <script src="../assets/js/config.js"></script>
 <script src="../assets/js/api.js"></script>
 <script src="../assets/js/auth.js"></script>
-
 <script>
-    document.getElementById("loginForm").addEventListener("submit", async function(e) {
+    function toggle(id,b){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'✎𓂃':'🔒︎'}
+    document.getElementById("loginForm").addEventListener("submit",async e=>{
         e.preventDefault();
-
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const errorMessage = document.getElementById("errorMessage");
-        const submitBtn = document.querySelector(".btn-primary");
-
-        errorMessage.style.display = "none";
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Signing in...";
-
-        try {
-            const result = await AuthAPI.login(email, password);
-
-            if (result.accessToken) {
-                saveToken(result);
-                const roles = JSON.parse(localStorage.getItem("userRoles") || "[]");
-                window.location.href = roles.includes("Admin") ? "admin.html" : "students.html";
-            } else {
-                errorMessage.textContent = result.message || "Login failed";
-                errorMessage.style.display = "block";
-            }
-        } catch (error) {
-            errorMessage.textContent = "An error occurred. Please try again.";
-            errorMessage.style.display = "block";
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Sign In";
-        }
+        const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+        const err=document.getElementById("errorMessage"),btn=document.querySelector(".btn");
+        err.style.display="none";btn.disabled=true;btn.textContent="Signing in...";
+        try{const r=await AuthAPI.login(email,password);if(r.accessToken){saveToken(r);const roles=JSON.parse(localStorage.getItem("userRoles")||"[]");location.href=roles.includes("Admin")?"dashboard.html":"instructors.html"}else{err.textContent=r.message||"Login failed";err.style.display="block"}}catch{err.textContent="An error occurred.";err.style.display="block"}finally{btn.disabled=false;btn.textContent="Sign In"}
     });
 </script>
 </body>

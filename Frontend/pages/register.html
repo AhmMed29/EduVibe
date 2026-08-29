@@ -1,156 +1,98 @@
 ﻿<!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - EduVibe</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Create an account - EduVibe</title>
     <style>
-        .form-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            background: white;
-            transition: border-color 0.3s;
-        }
-        .form-group select:focus {
-            outline: none;
-            border-color: #5b5fc7;
-        }
-        .form-row {
-            display: flex;
-            gap: 12px;
-        }
-        .form-row .form-group {
-            flex: 1;
-        }
-        .form-hint {
-            font-size: 12px;
-            color: #999;
-            margin-top: 6px;
-        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter','Segoe UI',Tahoma,sans-serif}
+        body{min-height:100vh;background:#f2f0ff;display:flex;align-items:center;justify-content:center;padding:24px}
+        .shell{width:100%;max-width:980px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(80,60,180,.18);display:grid;grid-template-columns:440px 1fr;overflow:hidden;padding:14px;gap:14px;align-items:stretch}
+        .left{position:relative;border-radius:16px;overflow:hidden;background:#0f0e1a;aspect-ratio:4/5.2}
+        .left img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+        .left::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.06) 0%,rgba(20,10,80,.12) 40%,rgba(10,10,30,.78) 100%)}
+        .star{position:absolute;top:16px;left:16px;z-index:2;color:#fff;font-size:20px;font-weight:900;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+        .left-text{position:absolute;bottom:0;left:0;right:0;z-index:2;padding:20px;color:#fff}
+        .left-text .small{font-size:11px;opacity:.9;margin-bottom:8px;letter-spacing:.3px}
+        .left-text h2{font-size:19px;line-height:1.35;font-weight:800}
+        .right{padding:22px 26px;display:flex;align-items:center}
+        .box{width:100%;max-width:380px;margin:0 auto}
+        .brand-star{color:#4f46ff;font-size:16px;font-weight:900;margin-bottom:6px}
+        .box h1{font-size:22px;font-weight:800;color:#111827}
+        .box p.sub{font-size:11.5px;color:#9aa0b3;margin:6px 0 16px;line-height:1.5}
+        label{font-size:11.5px;font-weight:600;color:#1f2937;display:block;margin-bottom:6px}
+        input,select{width:100%;padding:11px 12px;border:1px solid #e5e7eb;border-radius:10px;font-size:13px;background:#fff;outline:none}
+        input::placeholder{color:#b8bec9}
+        input:focus,select:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.12)}
+        .form-row{display:flex;gap:10px}
+        .form-row .fg{flex:1}
+        .fg{margin-bottom:12px;position:relative}
+        .hint{font-size:10.5px;color:#9aa0b3;margin-top:4px}
+        .eye{position:absolute;right:10px;top:33px;background:none;border:none;cursor:pointer;color:#9aa0b3}
+        .btn{width:100%;padding:13px;background:#4338ff;color:#fff;border:none;border-radius:10px;font-weight:800;font-size:14.5px;cursor:pointer;box-shadow:0 10px 20px rgba(67,56,255,.28);margin-top:4px;height:46px}
+        .btn:disabled{opacity:.6;cursor:not-allowed}
+        .error{background:#fff1f2;color:#e11d48;padding:10px;border-radius:8px;font-size:12px;display:none;margin-bottom:12px;border:1px solid #ffe4e6}
+        .divider{display:flex;align-items:center;gap:10px;color:#9aa0b3;font-size:11px;margin:16px 0}
+        .divider::before,.divider::after{content:'';flex:1;height:1px;background:#e5e7eb}
+        .social{display:flex;gap:10px}
+        .social button{flex:1;height:42px;border:1px solid #e5e7eb;background:#f3f4f6;border-radius:10px;cursor:pointer;font-weight:700;font-size:13px;display:grid;place-items:center;color:#4b5563}
+        .social button:hover{background:#eef2ff;border-color:#c7d2fe;color:#4338ff}
+        .bottom{font-size:11.5px;color:#9aa0b3;text-align:center;margin-top:14px}
+        .bottom a{color:#4338ff;font-weight:700;text-decoration:none}
+        @media(max-width:900px){.shell{grid-template-columns:1fr;max-width:480px}.left{aspect-ratio:16/10;min-height:260px}.right{padding:18px}}
+        @media(max-width:480px){body{padding:12px}.shell{padding:10px;gap:10px;border-radius:16px}}
     </style>
 </head>
 <body>
-<div class="login-container">
-    <div class="login-header">
-        <h1>Create Account</h1>
-        <p>Join EduVibe to get started</p>
+<div class="shell">
+    <div class="left">
+        <img class="bg" src="../assets/images/EduVibe-sign-up.png" alt="EduVibe">
+        <div class="star">✳</div>
+        <div class="left-text">
+            <div class="small">Welcome to EduVibe</div>
+            <h2>Empower your future — Learn, Connect and Grow with EduVibe</h2>
+        </div>
     </div>
-
-    <div id="errorMessage" class="error-message"></div>
-
-    <form id="registerForm">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="fname">First Name</label>
-                <input type="text" id="fname" placeholder="Ahmed" required>
-            </div>
-            <div class="form-group">
-                <label for="lname">Last Name</label>
-                <input type="text" id="lname" placeholder="Mohamed" required>
-            </div>
+    <div class="right">
+        <div class="box">
+            <div class="brand-star">✳</div>
+            <h1>Create an account</h1>
+            <p class="sub">Access your courses, tasks, and certificates anytime,<br>and keep your learning flowing in one place.</p>
+            <div id="errorMessage" class="error"></div>
+            <form id="registerForm" novalidate>
+                <div class="form-row">
+                    <div class="fg"><label for="fname">First Name</label><input id="fname" placeholder="Ahmed" required></div>
+                    <div class="fg"><label for="lname">Last Name</label><input id="lname" placeholder="Mohamed" required></div>
+                </div>
+                <div class="form-row">
+                    <div class="fg"><label for="email">Your email</label><input id="email" type="email" placeholder="farahsaidet786@gmail.com" required></div>
+                    <div class="fg"><label for="phone">Phone Number</label><input id="phone" placeholder="01xxxxxxxxx"></div>
+                </div>
+                <div class="form-row">
+                    <div class="fg"><label for="password">Password</label><input id="password" type="password" placeholder="••••••••••••" required><button type="button" class="eye" onclick="toggle('password',this)">👁</button><div class="hint">+8 chars, uppercase, lowercase, special</div></div>
+                    <div class="fg"><label for="confirmPassword">Confirm Password</label><input id="confirmPassword" type="password" placeholder="••••••••••••" required><button type="button" class="eye" onclick="toggle('confirmPassword',this)">👁</button></div>
+                </div>
+                <div class="fg"><label for="role">Register as</label><select id="role" required><option value="Student" selected>Student</option><option value="Instructor">Instructor</option></select></div>
+                <button type="submit" class="btn">Get Started</button>
+            </form>
+            <div class="divider"><span>or continue with</span></div>
+            <div class="social"><button>Bē</button><button style="color:#4285F4">G</button><button style="color:#1877f2">f</button></div>
+            <div class="bottom">Already have an account? <a href="login.html">Sign In</a></div>
         </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="you@example.com" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" placeholder="01xxxxxxxxx">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter password" required>
-                <p class="form-hint">+8 chars, uppercase, lowercase, special (@, #, ..)</p>
-            </div>
-            <div class="form-group">
-                <label for="confirmPassword">Confirm Password</label>
-                <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="role">Register as</label>
-            <select id="role" required>
-                <option value="Student" selected>Student</option>
-                <option value="Instructor">Instructor</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn-primary">Create Account</button>
-    </form>
-
-    <div class="divider">
-        <span>or continue with</span>
     </div>
-
-    <div class="social-buttons">
-        <button class="social-btn"><span>G</span></button>
-        <button class="social-btn">GitHub</button>
-    </div>
-
-    <p class="signup-link">
-        Already have an account? <a href="login.html">Sign In</a>
-    </p>
 </div>
-
 <script src="../assets/js/config.js"></script>
 <script src="../assets/js/api.js"></script>
 <script src="../assets/js/auth.js"></script>
-
 <script>
-    document.getElementById("registerForm").addEventListener("submit", async function(e) {
+    function toggle(id,b){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'👁':'🙈'}
+    document.getElementById("registerForm").addEventListener("submit",async e=>{
         e.preventDefault();
-
-        const fname = document.getElementById("fname").value;
-        const lname = document.getElementById("lname").value;
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
-        const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
-        const role = document.getElementById("role").value;
-        const errorMessage = document.getElementById("errorMessage");
-        const submitBtn = document.querySelector(".btn-primary");
-
-        errorMessage.style.display = "none";
-
-        if (password !== confirmPassword) {
-            errorMessage.textContent = "Passwords do not match.";
-            errorMessage.style.display = "block";
-            return;
-        }
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Creating account...";
-
-        try {
-            const result = await AuthAPI.register({
-                fname, lname, email, password, confirmPassword, phoneNumber: phone, role
-            });
-
-            if (result.accessToken) {
-                saveToken(result);
-                const roles = JSON.parse(localStorage.getItem("userRoles") || "[]");
-                window.location.href = roles.includes("Admin") ? "/pages/admin.html" : "/pages/students.html";
-            } else {
-                errorMessage.textContent = result.message || "Registration failed";
-                errorMessage.style.display = "block";
-            }
-        } catch (error) {
-            errorMessage.textContent = "An error occurred. Please try again.";
-            errorMessage.style.display = "block";
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Create Account";
-        }
+        const fname=document.getElementById("fname").value.trim(),lname=document.getElementById("lname").value.trim(),email=document.getElementById("email").value.trim(),phone=document.getElementById("phone").value.trim(),password=document.getElementById("password").value,confirmPassword=document.getElementById("confirmPassword").value,role,phone=document.getElementById("phone").value.trim(),password=document.getElementById("password").value,confirmPassword=document.getElementById("confirmPassword").value,role=document.getElementById("role").value;
+        const err=document.getElementById("errorMessage"),btn=document.querySelector(".btn");
+        err.style.display="none";
+        if(password!==confirmPassword){err.textContent="Passwords do not match.";err.style.display="block";return}
+        btn.disabled=true;btn.textContent="Creating account...";
+        try{const r=await AuthAPI.register({fname,lname,email,password,confirmPassword,phoneNumber:phone,role});if(r.accessToken){saveToken(r);location.href="instructors.html"}else{err.textContent=r.message||"Registration failed";err.style.display="block"}}catch{err.textContent="An error occurred.";err.style.display="block"}finally{btn.disabled=false;btn.textContent="Get Started"}
     });
 </script>
 </body>

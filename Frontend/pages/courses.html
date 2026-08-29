@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Courses - EduVibe</title>
+    <style>
+        * {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+        body{background:#fff;color:#1a1a2e}
+        .header{padding:18px 24px;border-bottom:1px solid #eef2f7;display:flex;justify-content:space-between;align-items:center}
+        .header h1{font-size:20px}
+        .tabs{display:flex;gap:20px;padding:0 24px;border-bottom:1px solid #eef2f7}
+        .tabs a{padding:14px 0;font-weight:700;font-size:13px;color:#9aa0b3;border-bottom:2px solid transparent;cursor:pointer}
+        .tabs a.active{color:#7c5cff;border-color:#7c5cff}
+        .section{padding:18px 24px}
+        .section h3{font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between}
+        .section h3 a{color:#7c5cff;font-size:12px;cursor:pointer;}
+
+        /* التصميم الجديد للكاتيجوريز (كلام بس) */
+        .cat-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .cat-card {
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            border: 1px solid #eef2f7;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 600;
+            font-size: 13px;
+            color: #4b5563;
+        }
+        .cat-card:hover {
+            background: #7c5cff;
+            color: #fff;
+            border-color: #7c5cff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(124,92,255,.15);
+        }
+        .cat-card.all {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
+        .cat-card.all:hover {
+            background: #333;
+            box-shadow: 0 6px 12px rgba(0,0,0,.2);
+        }
+
+        /* تصميم الكورسات */
+        .course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:14px}
+        .course-card{background:#fff;border-radius:16px;border:1px solid #eef2f7;padding:14px;cursor:pointer;transition:.15s}
+        .course-card:hover{box-shadow:0 8px 20px rgba(0,0,0,.07)}
+        .course-card .top{display:flex;justify-content:space-between;font-size:11px;color:#6b7280}
+        .level{padding:3px 8px;border-radius:20px;background:#e0e7ff;color:#4f46e5;font-weight:700;font-size:10px}
+        .dept{padding:3px 8px;border-radius:20px;background:#fef3c7;color:#a16207;font-weight:700;font-size:10px}
+        .course-card h4{margin:8px 0;font-size:14px;line-height:1.4;min-height:40px}
+        .meta{font-size:11px;color:#9aa0b3;margin-bottom:8px}
+        .instr{display:flex;gap:8px;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid #f1f5f9}
+        .instr img{width:28px;height:28px;border-radius:50%}
+        .instr b{font-size:12px}
+        .stars{margin-left:auto;color:#f59e0b;font-size:12px}
+        .hidden{display:none}
+    </style>
+</head>
+<body>
+<div class="header">
+    <h1>Browse Courses</h1>
+    <a href="instructors.html" style="color:#7c5cff;font-weight:700;text-decoration:none;">Instructors →</a>
+</div>
+<div class="tabs">
+    <a class="active" onclick="showCats()">Categories</a>
+    <a onclick="showAll()">All Courses</a>
+</div>
+
+<!-- Categories View -->
+<div id="catView">
+    <div class="section">
+        <h3>Categories <a onclick="showAll()">View All</a></h3>
+        <div class="cat-grid" id="catGrid"></div>
+    </div>
+</div>
+
+<!-- Courses Grid View -->
+<div id="coursesView" class="hidden">
+    <div class="section">
+        <h3 id="courseViewTitle">All Courses <a onclick="showCats()">← Categories</a></h3>
+        <div class="course-grid" id="courseGrid"></div>
+    </div>
+</div>
+
+<script>
+    const categories=[
+        {key:"ALL",name:"ALL"},
+        {key:"CS",name:"Computer Science"},
+        {key:"Design",name:"Graphic Design"},
+        {key:"Business",name:"Business"},
+        {key:"Medical",name:"Medical"},
+        {key:"Engineering",name:"Engineering"},
+        {key:"Math",name:"Mathematics"},
+        {key:"Language",name:"Language"},
+        {key:"Art",name:"Art & Illustration"}
+    ];
+
+    const courses=[
+        {title:"Node.js - The Complete Guide (incl. MVC, REST APIs)",instructor:"Joseph Robbins",dept:"CS",level:"Beginner",rating:"4.8",img:"https://i.pravatar.cc/100?img=15"},
+        {title:"Digital Marketing Fundamentals",instructor:"Blonde Drizzle",dept:"Business",level:"Intermediate",rating:"4.6",img:"https://i.pravatar.cc/100?img=8"},
+        {title:"UI/UX Design with Figma - Craft Your Future",instructor:"Savannah Nguyen",dept:"Design",level:"Beginner",rating:"4.9",img:"https://i.pravatar.cc/100?img=5"},
+        {title:"Machine Learning and Applications",instructor:"Diva Bliss",dept:"CS",level:"Advanced",rating:"4.7",img:"https://i.pravatar.cc/100?img=9"},
+        {title:"Fujifilm XT3 - Photography Masterclass",instructor:"Darrell Steward",dept:"Art",level:"Beginner",rating:"4.5",img:"https://i.pravatar.cc/100?img=12"}
+    ];
+
+    function renderCats(){
+        document.getElementById('catGrid').innerHTML = categories.map(c =>
+            `<div class="cat-card ${c.key === 'ALL' ? 'all' : ''}" onclick="filterByCat('${c.key}')">${c.name}</div>`
+        ).join('');
+    }
+
+    function renderCourses(list){
+        document.getElementById('courseGrid').innerHTML = list.map(c =>
+            `<div class="course-card" onclick="location.href='course-details.html?title='+encodeURIComponent('${c.title}')"> 
+                    <div class="top"><span class="level">${c.level} Level</span><span class="dept">${c.dept}</span></div> 
+                    <h4>${c.title}</h4> 
+                    <div class="meta">16,097 enrolled • 8 hours</div> 
+                    <div class="instr"> 
+                        <img src="${c.img}">
+                        <div><b>${c.instructor}</b><br><span style="font-size:11px;color:#9aa0b3">Instructor</span></div> 
+                        <span class="stars">★ ${c.rating}</span> 
+                    </div> 
+                </div>`
+        ).join('');
+    }
+
+    function filterByCat(cat){
+        document.getElementById('catView').classList.add('hidden');
+        document.getElementById('coursesView').classList.remove('hidden');
+        document.getElementById('courseViewTitle').innerHTML = (cat === 'ALL' ? 'All Courses' : cat) + ' <a onclick="showCats()" style="cursor:pointer;color:#7c5cff">← Categories</a>';
+        renderCourses(cat === 'ALL' ? courses : courses.filter(x => x.dept === cat));
+    }
+
+    function showAll(){ filterByCat('ALL'); }
+    function showCats(){
+        document.getElementById('coursesView').classList.add('hidden');
+        document.getElementById('catView').classList.remove('hidden');
+    }
+
+    renderCats();
+    renderCourses(courses);
+</script>
+</body>
+</html>
