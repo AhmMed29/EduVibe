@@ -3,6 +3,8 @@
 A .NET 9 Web API for a courses platform, built with a clean 3-Layer Architecture (PL / BLL / DAL).
 
 ![LandingPage](Frontend/assets/images/img.png)
+![SignIn](Frontend/assets/images/firefox_TWsD4IyAfr.png)
+![SignUp](Frontend/assets/images/firefox_2AsSCfHMX2.png)
 
 ## Table of Contents
 
