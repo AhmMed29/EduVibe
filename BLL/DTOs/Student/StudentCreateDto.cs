@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using EduVibe.DTOs.Shared;
+using EduVibe.Models.Entities;
 using EduVibe.Models.Enums;
 using EduVibe.Validators;
 
@@ -7,11 +9,11 @@ namespace EduVibe.DTOs.Student;
 public class StudentCreateDto
 {
     [Required]
-    [StringLength(20, ErrorMessage = "First Name Must be less Than 20 Letter")]
+    [StringLength(50, ErrorMessage = "First Name Must be less Than 20 Letter")]
     public string FirstName { get; set; } = null!;
 
     [Required]
-    [StringLength(20, ErrorMessage = "Last Name Must be less Than 20 Letter")]
+    [StringLength(50, ErrorMessage = "Last Name Must be less Than 20 Letter")]
     public string LastName { get; set; } = null!;
 
     
@@ -26,8 +28,11 @@ public class StudentCreateDto
     [Required]
     [DataType(DataType.Date)]
     [CustomValidation(typeof(DateValidator), nameof(DateValidator.ValidateAge))]
-    public DateTime DateOfBirth { get; set; }
+    public DateOnly DateOfBirth { get; set; }
 
+    [Required]
+    public AddressDto Address { get; set; }
+    
     [Required]
     public GenderType Gender { get; set; }
 }

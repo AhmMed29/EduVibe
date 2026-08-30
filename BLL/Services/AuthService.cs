@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using BLL.Settings;
+using EduVibe.Data;
 using EduVibe.DTOs.Account;
 using EduVibe.Models.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -15,16 +16,19 @@ public class AuthService : IAuthService
     private readonly IOptions<JwtSettings> _jwtSettings;
     private readonly IEmailSender _emailSender;
     private static readonly string[] AllowedPublicRoles = { "Student", "Instructor" };
+    private readonly AppDbContext _context;
 
     public AuthService(UserManager<ApplicationUser> userManager
         , ITokenService tokenService
         , IOptions<JwtSettings> jwtSettings
-        , IEmailSender emailSender)   
+        , IEmailSender emailSender   
+        , AppDbContext context)
     {
         _userManager = userManager;
         _tokenService = tokenService;
         _jwtSettings = jwtSettings;
         _emailSender = emailSender;
+        _context = context;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -51,8 +55,30 @@ public class AuthService : IAuthService
         
         var requestedRole = dto.Role?.Trim() ?? "Student";
         if (!AllowedPublicRoles.Contains(requestedRole))
-            throw new Exception($"Role '{requestedRole}' is not allowed for self-registration.");
+            throw new Exception($"something strange happend! ... try again ..!");
         await _userManager.AddToRoleAsync(user, requestedRole);
+
+        if (requestedRole == "Student")
+        {
+            var student = new Student
+            {
+                Fname = dto.Fname,
+                Lname = dto.Lname,
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
+                DateOfBirth = dto.DateOfBirth,
+                Gender = dto.GenderType,
+                Address = new StuAddress
+                {
+                    City = dto.Address.City,
+                    Country = dto.Address.Country
+                },
+                CreatedAt = DateTime.UtcNow
+            };
+            _context.Students.Add(student);
+            await _context.SaveChangesAsync();
+        }
+        
         
         var roles = await _userManager.GetRolesAsync(user);
         var token = _tokenService.GenerateAccessTokenAsync(user);

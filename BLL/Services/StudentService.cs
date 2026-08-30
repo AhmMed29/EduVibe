@@ -96,15 +96,17 @@ public class StudentService : IStudentService
         return _mapper.Map<StudentDto>(student);
     }
 
-    public async Task<Student> CreateAsync(Student student)
+    public async Task<Student> CreateAsync(StudentCreateDto dto)
     {
+        var student = _mapper.Map<Student>(dto);
         student.CreatedAt = DateTime.Now;
+        
         _context.Students.Add(student);
-        await _context.SaveChangesAsync();
+        _context.SaveChangesAsync();
         return student;
     }
 
-    public async Task UpdateAsync(int id, Student student)
+    public async Task UpdateAsync(int id, StudentUpdateDto dto)
     {
         var existingStudent = await _context.Students
             .Include(s => s.Address)
@@ -113,28 +115,27 @@ public class StudentService : IStudentService
         if (existingStudent == null)
             throw new NotFoundException($"Student with ID {id} not found.");
 
-        existingStudent.Fname = student.Fname;
-        existingStudent.Lname = student.Lname;
-        existingStudent.Email = student.Email;
-        existingStudent.UpdatedAt = student.UpdatedAt;
-        existingStudent.DateOfBirth = student.DateOfBirth;
-        existingStudent.PhoneNumber = student.PhoneNumber;
+        existingStudent.Fname = dto.FirstName;
+        existingStudent.Lname = dto.LastName;
+        existingStudent.UpdatedAt = DateTime.Now;
+        existingStudent.DateOfBirth = dto.DateOfBirth;
+        existingStudent.PhoneNumber = dto.Phone;
+        existingStudent.Gender = dto.Gender;
 
-        if (student.Address != null)
+        if (dto.Address.City != null && dto.Address.Country != null)
         {
             if (existingStudent.Address == null)
                 existingStudent.Address = new StuAddress();
 
-            existingStudent.Address.City = student.Address.City;
-            existingStudent.Address.Country = student.Address.Country;
+            existingStudent.Address.City = dto.Address.City;
+            existingStudent.Address.Country = dto.Address.Country;
         }
         else
         {
             existingStudent.Address = null;
         }
 
-        existingStudent.DepartmentId = student.DepartmentId;
-        existingStudent.Gender = student.Gender;
+        existingStudent.Gender = dto.Gender;
 
         await _context.SaveChangesAsync();
     }

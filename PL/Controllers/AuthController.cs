@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EduVibe.Controllers;
 
-[AllowAnonymous]
 [ApiController]
+[AllowAnonymous]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {

@@ -1,3 +1,5 @@
+using EduVibe.Models.Enums;
+
 namespace EduVibe.Models.Entities
 {
     public class Student 
@@ -8,10 +10,10 @@ namespace EduVibe.Models.Entities
         public StuAddress Address { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-        public string? Gender { get; set; }
+        public GenderType? Gender { get; set; }
         public virtual int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; } = null!;
         public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();

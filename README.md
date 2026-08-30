@@ -82,17 +82,19 @@ DELETE /api/Department/{id}
 
 ### Register
 
-| Frontend                                     | Endpoint                      | what it does                                                              | Request        | Response        |
-|----------------------------------------------|-------------------------------|---------------------------------------------------------------------------|----------------|-----------------|
-| ![Signup](Frontend/assets/images/signup.png) | **POST**   /api/Auth/register | send **access** Token & **refresh** Token & **Confirmation Code** in Mail | request sended | return response | 
+| Frontend                                     | Endpoint                      | what it does                                                              |
+|----------------------------------------------|-------------------------------|---------------------------------------------------------------------------|
+| ![Signup](Frontend/assets/images/signup.png) | **POST**   /api/Auth/register | send **access** Token & **refresh** Token & **Confirmation Code** in Mail | 
+| Request & Response                           | ---                           | - -                                                                       |
+| ![Register](Frontend/assets/images/Auth/testing_register.png)                           | ---                           | - -                                                                       |
 
 
 ### Login
 
-| Frontend | Endpoint               | what it does                       | Request        | Response        |
-|----------|------------------------|------------------------------|----------------|-----------------|
-| ![Signup](Frontend/assets/images/signin.png)  | **POST**   /api/Auth/login | **access** Token & **refresh** Token | request sended | return response | 
-
+| Frontend | Endpoint               | what it does                       |
+|----------|------------------------|------------------------------|
+| ![Signup](Frontend/assets/images/signin.png)  | **POST**   /api/Auth/login | **access** Token & **refresh** Token | 
+| ![Login](Frontend/assets/images/Auth/testing_login.png) | --- | --- |
 
 
 ## Prerequisites

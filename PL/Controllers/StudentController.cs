@@ -32,21 +32,20 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Student student)
+    public async Task<IActionResult> Create([FromBody] StudentCreateDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
 
-        var created = await _studentService.CreateAsync(student);
+        var created = await _studentService.CreateAsync(dto);
         return CreatedAtAction(nameof(GetStudent), new { id = created.Id }, created);
     }
-
+    
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] Student student)
+    public async Task<IActionResult> Update(int id, [FromBody] StudentUpdateDto dto)
     {
-        if (id != student.Id) return BadRequest(new { message = "ID mismatch" });
         if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        await _studentService.UpdateAsync(id, student);
+        
+        await _studentService.UpdateAsync(id, dto);
         return NoContent();
     }
 
