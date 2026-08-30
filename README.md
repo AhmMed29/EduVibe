@@ -81,15 +81,14 @@ DELETE /api/Department/{id}
 
 ### Register
 
-| Frontend | Endpoint                  | what it does                                                  |
-|----------|---------------------------|---------------------------------------------------------------|
-| ![Signin](Frontend/assets/images/signup.png)  | **POST**   /api/Auth/register | send **access** Token & **refresh** Token & **Confirmation Code** In Mail |
-
+| Frontend                                     | Endpoint                      | what it does                                                              | Request        | Response        |
+|----------------------------------------------|-------------------------------|---------------------------------------------------------------------------|----------------|-----------------|
+| ![Signup](Frontend/assets/images/signup.png) | **POST**   /api/Auth/register | send **access** Token & **refresh** Token & **Confirmation Code** in Mail | request sended | return response | 
 
 
 ### Login
 
-| Frontend | Endpoint               | Return                       | Request        | Response        |
+| Frontend | Endpoint               | what it does                       | Request        | Response        |
 |----------|------------------------|------------------------------|----------------|-----------------|
 | ![Signup](Frontend/assets/images/signin.png)  | **POST**   /api/Auth/login | **access** Token & **refresh** Token | request sended | return response | 
 
