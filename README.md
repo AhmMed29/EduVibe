@@ -10,7 +10,8 @@ A .NET 9 Web API for a courses platform, built with a clean 3-Layer Architecture
 - [Tech Stack](#tech-stack)
 - [Current Features](#current-features)
 - [API Endpoints](#api-endpoints)
-  - [ ] s
+  - [Register](#register)
+  - [Login](#login)
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Configuration](#configuration)
