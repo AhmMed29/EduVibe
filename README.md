@@ -3,8 +3,6 @@
 A .NET 9 Web API for a courses platform, built with a clean 3-Layer Architecture (PL / BLL / DAL).
 
 ![LandingPage](Frontend/assets/images/landing.png)
-![SignIn](Frontend/assets/images/signin.png)
-![SignUp](Frontend/assets/images/signup.png)
 
 ## Table of Contents
 
@@ -12,6 +10,7 @@ A .NET 9 Web API for a courses platform, built with a clean 3-Layer Architecture
 - [Tech Stack](#tech-stack)
 - [Current Features](#current-features)
 - [API Endpoints](#api-endpoints)
+  - [ ] s
 - [Prerequisites](#prerequisites)
 - [Setup](#setup)
 - [Configuration](#configuration)
@@ -79,6 +78,22 @@ POST   /api/Department
 PUT    /api/Department/{id}
 DELETE /api/Department/{id}
 ```
+
+### Register
+
+| Frontend | Endpoint                  | what it does                                                  |
+|----------|---------------------------|---------------------------------------------------------------|
+| ![Signin](Frontend/assets/images/signup.png)  | **POST**   /api/Auth/register | send **access** Token & **refresh** Token & **Confirmation Code** In Mail |
+
+
+
+### Login
+
+| Frontend | Endpoint               | Return                       | Request        | Response        |
+|----------|------------------------|------------------------------|----------------|-----------------|
+| ![Signup](Frontend/assets/images/signin.png)  | **POST**   /api/Auth/login | **access** Token & **refresh** Token | request sended | return response | 
+
+
 
 ## Prerequisites
 
