@@ -361,7 +361,7 @@ namespace DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("Date");
 
                     b.Property<int?>("DepartmentId")
@@ -377,8 +377,8 @@ namespace DAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("NVarchar");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Lname")
                         .IsRequired()

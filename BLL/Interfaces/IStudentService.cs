@@ -8,7 +8,7 @@ public interface IStudentService
 {
     Task<PagedResponse<StudentDto>> GetAllAsync(StudentFilterRequest request);
     Task<StudentDto> GetByIdAsync(int id);
-    Task<Student> CreateAsync(Student student);
-    Task UpdateAsync(int id, Student student);
+    Task<StudentDto> CreateAsync(StudentCreateDto dto);
+    Task UpdateAsync(int id, StudentUpdateDto dto);
     Task DeleteAsync(int id);
 }
