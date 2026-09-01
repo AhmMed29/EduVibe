@@ -22,6 +22,8 @@ namespace EduVibe.Models.Entities
         public virtual int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
         public GenderType Gender { get; set; } = GenderType.Male;
+        public string ApplicationUserId { get; set; } = null!;
+        public ApplicationUser ApplicationUser { get; set; } = null!;
 }
     public class InsAddress
     {

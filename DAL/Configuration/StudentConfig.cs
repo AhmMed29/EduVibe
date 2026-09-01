@@ -45,6 +45,15 @@ namespace EduVibe.Configuration
             builder.Property(x => x.DateOfBirth)
                 .HasColumnType("Date")
                 .IsRequired();
+
+            builder
+                .HasOne(x => x.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Student>(x => x.ApplicationUserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.HasIndex(x=>x.ApplicationUserId).IsUnique();
         }
     }
 }

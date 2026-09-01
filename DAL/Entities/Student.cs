@@ -17,6 +17,8 @@ namespace EduVibe.Models.Entities
         public virtual int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; } = null!;
         public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
+        public string ApplicationUserId { get; set; } = null!;
+        public ApplicationUser ApplicationUser { get; set; } = null!;
     }
     public class StuAddress
     {

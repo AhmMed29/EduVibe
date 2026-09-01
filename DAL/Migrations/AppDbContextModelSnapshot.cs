@@ -278,10 +278,14 @@ namespace DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("Date");
 
                     b.Property<int?>("DepartmentId")
@@ -296,6 +300,9 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("NVarchar");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Lname")
                         .IsRequired()
@@ -323,6 +330,9 @@ namespace DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
 
                     b.HasIndex("DepartmentId");
 
@@ -357,6 +367,10 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -394,6 +408,9 @@ namespace DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId")
+                        .IsUnique();
 
                     b.HasIndex("DepartmentId");
 
@@ -576,6 +593,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("EduVibe.Models.Entities.Instructor", b =>
                 {
+                    b.HasOne("EduVibe.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne()
+                        .HasForeignKey("EduVibe.Models.Entities.Instructor", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EduVibe.Models.Entities.Department", "Department")
                         .WithMany("Instructors")
                         .HasForeignKey("DepartmentId");
@@ -606,6 +629,8 @@ namespace DAL.Migrations
                     b.Navigation("Address")
                         .IsRequired();
 
+                    b.Navigation("ApplicationUser");
+
                     b.Navigation("Department");
                 });
 
@@ -622,6 +647,12 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("EduVibe.Models.Entities.Student", b =>
                 {
+                    b.HasOne("EduVibe.Models.Entities.ApplicationUser", "ApplicationUser")
+                        .WithOne()
+                        .HasForeignKey("EduVibe.Models.Entities.Student", "ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EduVibe.Models.Entities.Department", "Department")
                         .WithMany("Students")
                         .HasForeignKey("DepartmentId");
@@ -651,6 +682,8 @@ namespace DAL.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Department");
                 });

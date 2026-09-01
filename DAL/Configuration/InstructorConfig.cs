@@ -56,6 +56,14 @@ namespace EduVibe.Configuration
                 .HasColumnType("Decimal(18,2)")
                 .IsRequired(false);
 
+            builder.HasOne(x => x.ApplicationUser)
+                .WithOne()
+                .HasForeignKey<Instructor>(x => x.ApplicationUserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+            
+            builder.HasIndex(x=>x.ApplicationUserId)
+                .IsUnique();
         }
     }
 }
