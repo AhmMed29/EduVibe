@@ -76,7 +76,8 @@ public class AuthService : IAuthService
                     City = dto.Address.City,
                     Country = dto.Address.Country
                 },
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                ApplicationUserId = user.Id
             };
             await _context.Students.AddAsync(student);
             await _context.SaveChangesAsync();
@@ -97,7 +98,8 @@ public class AuthService : IAuthService
                     City = dto.Address.City,
                     Country = dto.Address.Country
                 },
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                ApplicationUserId = user.Id
             };
             await _context.Instructors.AddAsync(instructor);
             await _context.SaveChangesAsync();
