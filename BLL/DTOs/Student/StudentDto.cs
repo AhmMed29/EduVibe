@@ -11,7 +11,7 @@ public class StudentDto
     public string PhoneNumber { get; set; } = null!;
     public DateOnly DateOfBirth { get; set; }
     public string? Gender { get; set; }
-    
+    public DateTime CreatedAt { get; set; }
     public string? DepartmentName { get; set; }
     public AddressDto? Address { get; set; }
     public ICollection<EnrollmentDto> Enrollments { get; set; } = new List<EnrollmentDto>();

@@ -6,6 +6,7 @@ using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
 using EduVibe.Models.Exceptions;
 using EduVibe.Models.Response;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace EduVibe.Services;
 
@@ -96,14 +97,17 @@ public class StudentService : IStudentService
         return _mapper.Map<StudentDto>(student);
     }
 
-    public async Task<Student> CreateAsync(StudentCreateDto dto)
+    public async Task<StudentDto> CreateAsync(StudentCreateDto dto)
     {
+        // mapping : <Destination>(Source Object)
         var student = _mapper.Map<Student>(dto);
-        student.CreatedAt = DateTime.Now;
+        student.CreatedAt = DateTime.UtcNow;
         
-        _context.Students.Add(student);
-        _context.SaveChangesAsync();
-        return student;
+        await _context.Students.AddAsync(student);
+        await _context.SaveChangesAsync();
+        
+        var studentMapped = _mapper.Map<StudentDto>(student);
+        return studentMapped;
     }
 
     public async Task UpdateAsync(int id, StudentUpdateDto dto)

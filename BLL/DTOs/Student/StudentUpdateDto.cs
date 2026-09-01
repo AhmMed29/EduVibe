@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using EduVibe.DTOs.Shared;
 using EduVibe.Models.Entities;
 using EduVibe.Models.Enums;
 using EduVibe.Validators;

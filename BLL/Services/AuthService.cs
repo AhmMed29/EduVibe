@@ -54,8 +54,11 @@ public class AuthService : IAuthService
         }
         
         var requestedRole = dto.Role?.Trim() ?? "Student";
-        if (!AllowedPublicRoles.Contains(requestedRole))
-            throw new Exception($"something strange happend! ... try again ..!");
+        if (!AllowedPublicRoles.Any(r => r.Equals(requestedRole, StringComparison.OrdinalIgnoreCase)))
+            throw new Exception($"Invalid role.");
+        
+        requestedRole = AllowedPublicRoles
+            .First(r => r.Equals(requestedRole, StringComparison.OrdinalIgnoreCase));
         await _userManager.AddToRoleAsync(user, requestedRole);
 
         if (requestedRole == "Student")
@@ -75,10 +78,30 @@ public class AuthService : IAuthService
                 },
                 CreatedAt = DateTime.UtcNow
             };
-            _context.Students.Add(student);
+            await _context.Students.AddAsync(student);
             await _context.SaveChangesAsync();
         }
         
+        else if (requestedRole == "Instructor")
+        {
+            var instructor = new Instructor
+            {
+                Fname = dto.Fname,
+                Lname = dto.Lname,
+                Email = dto.Email,
+                PhoneNumber = dto.PhoneNumber,
+                DateOfBirth = dto.DateOfBirth,
+                Gender = dto.GenderType,
+                Address = new InsAddress
+                {
+                    City = dto.Address.City,
+                    Country = dto.Address.Country
+                },
+                CreatedAt = DateTime.UtcNow
+            };
+            await _context.Instructors.AddAsync(instructor);
+            await _context.SaveChangesAsync();
+        }
         
         var roles = await _userManager.GetRolesAsync(user);
         var token = _tokenService.GenerateAccessTokenAsync(user);

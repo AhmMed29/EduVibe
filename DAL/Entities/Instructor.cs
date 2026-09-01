@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using EduVibe.Models.Enums;
+
 namespace EduVibe.Models.Entities
 {
     public class Instructor
@@ -9,18 +11,18 @@ namespace EduVibe.Models.Entities
         public InsAddress Address { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string PhoneNumber { get; set; } = null!;
-        public DateTime DateOfBirth { get; set; }
+        public DateOnly DateOfBirth { get; set; }
         public string? ProfileImageUrl { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public decimal? Salary { get; set; }
-        [NotMapped]
-        public virtual ICollection<Course> Courses { get; set; } = new HashSet<Course>();
+        [NotMapped] public virtual ICollection<Course> Courses { get; set; } = new HashSet<Course>();
         public virtual int? DepartmentId { get; set; }
         public virtual Department? Department { get; set; }
-    }
+        public GenderType Gender { get; set; } = GenderType.Male;
+}
     public class InsAddress
     {
         public string City { get; set; } = null!;

@@ -94,7 +94,7 @@ namespace EduVibe
 
                 options.User.RequireUniqueEmail = true;
 
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
