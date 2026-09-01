@@ -360,6 +360,41 @@ namespace DAL.Migrations
                     b.ToTable("InstructorCourses");
                 });
 
+            modelBuilder.Entity("EduVibe.Models.Entities.OtpCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CodeHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ExpireAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Purpose")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email", "Purpose");
+
+                    b.ToTable("OtpCodes", (string)null);
+                });
+
             modelBuilder.Entity("EduVibe.Models.Entities.Student", b =>
                 {
                     b.Property<int>("Id")

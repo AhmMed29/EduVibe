@@ -35,7 +35,8 @@ namespace EduVibe.Data
         public virtual DbSet<Department> Departments { get; set; }
         public DbSet<InstructorCourse> InstructorCourses { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
-
+        public DbSet<OtpCode> OtpCodes { get; set; }
+        
         [DbFunction("fn_GetStudentsAddress",schema: "dbo")]
         public IQueryable<Student> GetStudentsAddress(string city) 
             => FromExpression(() => GetStudentsAddress(city));
