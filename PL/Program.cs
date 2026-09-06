@@ -49,6 +49,7 @@ namespace EduVibe
             builder.Services.AddScoped<IDepartmentService, DepartmentService>(); 
             builder.Services.AddScoped<IInstructorService, InstructorService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IOtpService, OtpService>();
             
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 

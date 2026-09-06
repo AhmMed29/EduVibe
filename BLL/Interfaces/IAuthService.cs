@@ -1,4 +1,5 @@
 ﻿using EduVibe.DTOs.Account;
+using EduVibe.Models.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace BLL.Interfaces;
@@ -12,4 +13,7 @@ public interface IAuthService
     // using Task means that it will NOT return anything
     Task RequestResetAsync(RequestResetDto dto);
     Task ConfirmResetAsync(ConfirmResetDto dto);
+
+    Task ConfirmEmailAsync(ConfirmEmailDto dto);
+    Task ResendConfirmationAsync(ResendCodeDto dto);
 }
