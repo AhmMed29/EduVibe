@@ -12,7 +12,7 @@ public class OtpCode
     public string Email { get; set; }
     [Required]
     public string CodeHash { get; set; } // store the otp code hashed
-    public OtpPurpose Purpose;
+    public OtpPurpose Purpose { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpireAt { get; set; }
     public int Attempts { get; set; }

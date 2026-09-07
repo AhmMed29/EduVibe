@@ -1,14 +1,15 @@
+using System.Text;
+using BLL.Interfaces;
+using BLL.Services;
+using BLL.Settings;
 using EduVibe.Data;
+using Resend;
+using EduVibe.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using EduVibe.Models.Entities;
 using EduVibe.Middlewares;
 using EduVibe.Services;
-using System.Text;
-using BLL.Interfaces;
-using BLL.Services;
-using BLL.Settings;
-using EduVibe.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.IdentityModel.Tokens;
@@ -37,6 +38,16 @@ namespace EduVibe
                         .AllowAnyMethod();
                 });
             });
+            
+            // email service 
+            builder.Services.AddOptions();
+            builder.Services.AddHttpClient<ResendClient>();
+            builder.Services.Configure<ResendClientOptions>(o =>
+            {
+                o.ApiToken = Environment.GetEnvironmentVariable("resendkey");
+
+            });
+            builder.Services.AddTransient<IResend,  ResendClient>();
             
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

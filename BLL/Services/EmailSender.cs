@@ -1,46 +1,43 @@
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using Microsoft.AspNetCore.Identity.UI.Services;
-
+using Resend;
 
 public class EmailSender : IEmailSender
 {
     private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
+    private IResend _resend;
 
-    public EmailSender(IConfiguration configuration, ILogger<EmailSender> logger)
+    public EmailSender(IConfiguration configuration, ILogger<EmailSender> logger, IResend resend)
     {
         _configuration = configuration;
         _logger = logger;
+        _resend = resend;
     }
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        var sendGridKey = _configuration["SendGridKey"];
-        ArgumentNullException.ThrowIfNullOrEmpty(sendGridKey, nameof(sendGridKey));
-        await Execute(sendGridKey, subject, message, toEmail);
+        var resendproviderKey = _configuration["resendkey"];
+        ArgumentNullException.ThrowIfNullOrEmpty(resendproviderKey, nameof(resendproviderKey));
+        await Execute(resendproviderKey, subject, message, toEmail);
     }
 
-    public async Task Execute(string apiKey, string subject, string message, string toEmail)
+    private async Task Execute(string apiKey, string subject, string message, string toEmail)
     {
-        var client = new SendGridClient(apiKey);
+        _resend = ResendClient.Create(apiKey);
 
-        var msg = new SendGridMessage()
+        // other options(overloads) & more ...
+        // EmailSendAsync (email , cancelation token) --> [there are many overrides like (send one mail ! to avoid recurrency)]
+        
+        var resp = await _resend.EmailSendAsync( new EmailMessage()
         {
-            From = new EmailAddress(_configuration["From"], _configuration["Name"]),
+            // the name user see <any related word to the service@eduvibe.ahmedghazi.me>
+            From = "EduVibe <noreply@eduvibe.ahmedghazi.me>",
+            To = toEmail,
             Subject = subject,
-            PlainTextContent = message,
-            HtmlContent = message
-        };
+            HtmlBody = message,
+        } );
 
-        msg.AddTo(new EmailAddress(toEmail));
-
-        // Disable click tracking.  
-        // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html  
-        msg.SetClickTracking(false, false);
-
-        var response = await client.SendEmailAsync(msg);
-        _logger.LogInformation(response.IsSuccessStatusCode
+        _logger.LogInformation(resp.Success
                                ? $"Email to {toEmail} queued successfully!"
                                : $"Failure Email to {toEmail}");
     }
