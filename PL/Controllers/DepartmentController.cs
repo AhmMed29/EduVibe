@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Mvc;
-using EduVibe.DTOs.Department;
 using EduVibe.Interfaces;
+using EduVibe.DTOs.Department;
 using EduVibe.Models.Entities;
-using EduVibe.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EduVibe.Controllers;
-
+[Authorize]
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/[controller]")]
 public class DepartmentController : ControllerBase
 {
     private readonly IDepartmentService _departmentService;
@@ -32,6 +32,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] Department department)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -41,6 +42,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] Department department)
     {
         if (id != department.Id) return BadRequest(new { Message = $"Department {id} Not Found" });
@@ -51,6 +53,7 @@ public class DepartmentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _departmentService.DeleteAsync(id);

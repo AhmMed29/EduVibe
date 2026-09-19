@@ -14,6 +14,6 @@ public interface IAuthService
     Task RequestResetAsync(RequestResetDto dto);
     Task ConfirmResetAsync(ConfirmResetDto dto);
 
-    Task ConfirmEmailAsync(ConfirmEmailDto dto);
-    Task ResendConfirmationAsync(ResendCodeDto dto);
+    //Task ConfirmEmailAsync(ConfirmEmailDto dto);
+    //Task ResendConfirmationAsync(ResendCodeDto dto);
 }

@@ -44,8 +44,7 @@ namespace EduVibe
             builder.Services.AddHttpClient<ResendClient>();
             builder.Services.Configure<ResendClientOptions>(o =>
             {
-                o.ApiToken = Environment.GetEnvironmentVariable("resendkey");
-
+                o.ApiToken = builder.Configuration["resendkey"];
             });
             builder.Services.AddTransient<IResend,  ResendClient>();
             
@@ -106,13 +105,13 @@ namespace EduVibe
 
                 options.User.RequireUniqueEmail = true;
 
-                options.SignIn.RequireConfirmedEmail = true;
+                options.SignIn.RequireConfirmedEmail = false;
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders(); /* For Email Confirm & Password Reset */
+            
             builder.Services.AddDataProtection();
-
 
             var app = builder.Build();
 

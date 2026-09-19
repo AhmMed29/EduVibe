@@ -16,7 +16,7 @@ namespace BLL.Services;
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ITokenService _tokenService; 
+    private readonly ITokenService _tokenService;
     private readonly IOptions<JwtSettings> _jwtSettings;
     private readonly IEmailSender _emailSender;
     private static readonly string[] AllowedPublicRoles = { "Student", "Instructor" };
@@ -26,7 +26,7 @@ public class AuthService : IAuthService
     public AuthService(UserManager<ApplicationUser> userManager
         , ITokenService tokenService
         , IOptions<JwtSettings> jwtSettings
-        , IEmailSender emailSender   
+        , IEmailSender emailSender
         , AppDbContext context
         , IOtpService otpService)
     {
@@ -44,126 +44,132 @@ public class AuthService : IAuthService
         var requestedRole = dto.Role?.Trim() ?? "Student";
         if (!AllowedPublicRoles.Any(r => r.Equals(requestedRole, StringComparison.OrdinalIgnoreCase)))
             throw new Exception($"Invalid role.");
-        
-        // normalizing casing 
+
+        // normalizing casing .. Aa
         requestedRole = AllowedPublicRoles
             .First(r => r.Equals(requestedRole, StringComparison.OrdinalIgnoreCase));
-   
-        // check email is unique and not registered before
+
         var existingUser = await _userManager.FindByEmailAsync(dto.Email);
         if (existingUser != null)
             throw new Exception("Email is already registered.");
 
-        // create the user
-        var user = new ApplicationUser
+        // this transaction to implement the principle of (Unit Of Work): All or No One
+        // "await using" : for unhandled exceptions it do the same what (catch) do 
+        await using var transaction = _context.Database.BeginTransaction();
+        try
         {
-            UserName = dto.Email,
-            Email = dto.Email,
-            FirstName = dto.Fname,
-            LastName = dto.Lname,
-            PhoneNumber = dto.PhoneNumber
-        };
-        
-        var result = await _userManager.CreateAsync(user, dto.Password);
-        if (!result.Succeeded)
-        {
-            var errors = string.Join(", ", result.Errors.Select(x => x.Description));
-            throw new Exception($"Registration  Failed: {errors}");
-        }
+            var user = new ApplicationUser
+            {
+                UserName = dto.Email,
+                Email = dto.Email,
+                FirstName = dto.Fname,
+                LastName = dto.Lname,
+                PhoneNumber = dto.PhoneNumber
+            };
 
-        var code = await _otpService.GenerateAsync(dto.Email, OtpPurpose.Register);
-        
-        if (requestedRole == "Student")
-        {
-            var student = new Student
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
             {
-                Fname = dto.Fname,
-                Lname = dto.Lname,
-                Email = dto.Email,
-                PhoneNumber = dto.PhoneNumber,
-                DateOfBirth = dto.DateOfBirth,
-                Gender = dto.GenderType,
-                Address = new StuAddress
+                var errors = string.Join(", ", result.Errors.Select(x => x.Description));
+                throw new Exception($"Registration  Failed: {errors}");
+            }
+
+
+            if (requestedRole == "Student")
+            {
+                var student = new Student
                 {
-                    City = dto.Address.City,
-                    Country = dto.Address.Country
-                },
-                CreatedAt = DateTime.UtcNow,
-                ApplicationUserId = user.Id
-            };
-            
-            _context.OtpCodes.Add(new OtpCode {
+                    Fname = dto.Fname,
+                    Lname = dto.Lname,
+                    Email = dto.Email,
+                    PhoneNumber = dto.PhoneNumber,
+                    DateOfBirth = dto.DateOfBirth,
+                    Gender = dto.GenderType,
+                    Address = new StuAddress
+                    {
+                        City = dto.Address.City,
+                        Country = dto.Address.Country
+                    },
+                    CreatedAt = DateTime.UtcNow,
+                    ApplicationUserId = user.Id
+                };
+
+                await _context.Students.AddAsync(student);
+                await _context.SaveChangesAsync();
+            }
+            else if (requestedRole == "Instructor")
+            {
+                var instructor = new Instructor
+                {
+                    Fname = dto.Fname,
+                    Lname = dto.Lname,
+                    Email = dto.Email,
+                    PhoneNumber = dto.PhoneNumber,
+                    DateOfBirth = dto.DateOfBirth,
+                    Gender = dto.GenderType,
+                    Address = new InsAddress
+                    {
+                        City = dto.Address.City,
+                        Country = dto.Address.Country
+                    },
+                    CreatedAt = DateTime.UtcNow,
+                    ApplicationUserId = user.Id
+                };
+
+                await _context.Instructors.AddAsync(instructor);
+                await _context.SaveChangesAsync();
+            }
+
+            await _userManager.AddToRoleAsync(user, requestedRole);
+
+            var otpResult = await _otpService.GenerateAsync(dto.Email, OtpPurpose.Register);
+            _context.OtpCodes.Add(new OtpCode
+            {
                 Email = dto.Email,
-                CodeHash = code,
+                CodeHash = otpResult.HashedCode,
                 CreatedAt = DateTime.UtcNow,
                 ExpireAt = DateTime.UtcNow.AddMinutes(5),
                 Purpose = OtpPurpose.Register
             });
-            
-            await _context.Students.AddAsync(student);
             await _context.SaveChangesAsync();
-        }
-        
-        else if (requestedRole == "Instructor")
-        {
-            var instructor = new Instructor
+            await transaction.CommitAsync();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var token = await _tokenService.GenerateAccessTokenAsync(user);
+
+            return new AuthResponseDto
             {
-                Fname = dto.Fname,
-                Lname = dto.Lname,
-                Email = dto.Email,
-                PhoneNumber = dto.PhoneNumber,
-                DateOfBirth = dto.DateOfBirth,
-                Gender = dto.GenderType,
-                Address = new InsAddress
-                {
-                    City = dto.Address.City,
-                    Country = dto.Address.Country
-                },
-                CreatedAt = DateTime.UtcNow,
-                ApplicationUserId = user.Id
+                AccessToken = token,
+                ExpiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.Value.DurationInMinutes),
+                Email = user.Email,
+                Roles = roles.ToList(),
+                UserName = user.UserName
             };
-            
-            _context.OtpCodes.Add(new OtpCode {
-                Email = dto.Email,
-                CodeHash = code,
-                CreatedAt = DateTime.UtcNow,
-                ExpireAt = DateTime.UtcNow.AddMinutes(5),
-                Purpose = OtpPurpose.Register
-            });
-            
-            await _context.Instructors.AddAsync(instructor);
-            await _context.SaveChangesAsync();
         }
-        
-        
-        await _userManager.AddToRoleAsync(user, requestedRole);
-        
-        var roles = await _userManager.GetRolesAsync(user);
-        var token = _tokenService.GenerateAccessTokenAsync(user);
-        
-        return new AuthResponseDto
+        catch
         {
-            AccessToken = await token,
-            ExpiresIn = DateTime.UtcNow.AddMinutes(_jwtSettings.Value.DurationInMinutes),
-            Email = user.Email,
-            Roles = roles.ToList(),
-            UserName = user.UserName
-        };
+            await transaction.RollbackAsync();
+            throw; // re-throw so the controller still returns the error
+            // means: "I handled what I needed to (the rollback), now pass the same exception UP to the caller as if I never caught it."
+            // With throw;, the exception continues up to the controller's catch (Exception ex) block, which returns the error in response.
+        }
     }
 
+    
     public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
     {
+        // email
         var user = await _userManager.FindByEmailAsync(dto.Email);
         if (user == null)
             throw new UnauthorizedAccessException("Invalid email or password.");
-
+        
+        // password
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
         if (!isPasswordValid)
             throw new UnauthorizedAccessException("Invalid email or password.");
 
         var roles = await _userManager.GetRolesAsync(user);
         var token = await _tokenService.GenerateAccessTokenAsync(user);
-        var code = await _otpService.GenerateAsync(dto.Email, OtpPurpose.Register);
 
         return new AuthResponseDto
         {
@@ -202,13 +208,13 @@ public class AuthService : IAuthService
         }
     }
 
-    public Task ConfirmEmailAsync(ConfirmEmailDto missing_name)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task ResendConfirmationAsync(ResendCodeDto missing_name)
-    {
-        throw new NotImplementedException();
-    }
+    // i will not do this ... No Perfectionism
+    // public Task ConfirmEmailAsync(ConfirmEmailDto missing_name)
+    // {
+    //     throw new NotImplementedException();
+    // }
+    // public Task ResendConfirmationAsync(ResendCodeDto missing_name)
+    // {
+    //     throw new NotImplementedException();
+    // }
 }

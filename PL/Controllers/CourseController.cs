@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace EduVibe.Controllers;
 
 [ApiController]
-[Authorize(Roles ="Admin, Instructor")]
+[Authorize]
 [Route("api/[controller]")]
 public class CourseController : ControllerBase
 {
@@ -34,6 +34,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles ="Admin, Instructor")]
     public async Task<IActionResult> Create([FromBody] Course course)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -43,6 +44,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles ="Admin, Instructor")]
     public async Task<IActionResult> Update(int id, [FromBody] Course course)
     {
         if (id != course.Id) return BadRequest(new { message = "ID Mismatch" });
@@ -53,6 +55,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _courseService.DeleteAsync(id);

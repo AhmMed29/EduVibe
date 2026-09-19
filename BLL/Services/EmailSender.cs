@@ -5,7 +5,7 @@ public class EmailSender : IEmailSender
 {
     private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
-    private IResend _resend;
+    private readonly IResend _resend;
 
     public EmailSender(IConfiguration configuration, ILogger<EmailSender> logger, IResend resend)
     {
@@ -16,15 +16,12 @@ public class EmailSender : IEmailSender
 
     public async Task SendEmailAsync(string toEmail, string subject, string message)
     {
-        var resendproviderKey = _configuration["resendkey"];
-        ArgumentNullException.ThrowIfNullOrEmpty(resendproviderKey, nameof(resendproviderKey));
+        var resendproviderKey = Environment.GetEnvironmentVariable("resendkey");
         await Execute(resendproviderKey, subject, message, toEmail);
     }
 
     private async Task Execute(string apiKey, string subject, string message, string toEmail)
     {
-        _resend = ResendClient.Create(apiKey);
-
         // other options(overloads) & more ...
         // EmailSendAsync (email , cancelation token) --> [there are many overrides like (send one mail ! to avoid recurrency)]
         
@@ -36,9 +33,14 @@ public class EmailSender : IEmailSender
             Subject = subject,
             HtmlBody = message,
         } );
-
-        _logger.LogInformation(resp.Success
-                               ? $"Email to {toEmail} queued successfully!"
-                               : $"Failure Email to {toEmail}");
+        if (resp.Success)
+        {
+            _logger.LogInformation("Email to {toEmail}", toEmail);
+        }
+        else
+        {
+            _logger.LogError("Failed to send email to {toEmail}. Error: {@Error}", toEmail, resp.Exception);
+            throw new Exception($"Email sending failed to {toEmail}");
+        }
     }
 }

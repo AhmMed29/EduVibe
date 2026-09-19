@@ -3,10 +3,12 @@ using EduVibe.DTOs.Instructor;
 using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
 using EduVibe.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EduVibe.Controllers;
 
 [ApiController]
+[AllowAnonymous]
 [Route("api/[controller]")]
 public class InstructorController : ControllerBase
 {
@@ -32,6 +34,7 @@ public class InstructorController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] Instructor instructor)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -41,6 +44,7 @@ public class InstructorController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin, Instructor")]
     public async Task<IActionResult> Update(int id, [FromBody] Instructor instructor)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -50,6 +54,7 @@ public class InstructorController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin, Instructor")]
     public async Task<IActionResult> Delete(int id)
     {
         await _instructorService.DeleteAsync(id);
