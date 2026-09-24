@@ -117,6 +117,7 @@ namespace EduVibe
             
             builder.Services.AddDataProtection();
 
+            // tell now this was Fixed Window Algorithm for rate limiting
             builder.Services.AddRateLimiter(options =>
             {
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
