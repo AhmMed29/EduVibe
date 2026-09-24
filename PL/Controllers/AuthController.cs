@@ -2,6 +2,7 @@ using BLL.Interfaces;
 using EduVibe.DTOs.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace EduVibe.Controllers;
 
@@ -19,6 +20,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
+    [EnableRateLimiting("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
         try
@@ -33,6 +35,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("login")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> LoginAsync([FromBody] LoginDto dto)
     {
         try
@@ -51,6 +54,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("password-reset")]
+    [EnableRateLimiting("password-reset")]
     public async Task<IActionResult> PasswordReset([FromBody] RequestResetDto dto)
     {
         try
@@ -69,6 +73,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("confirm-reset")]
+    [EnableRateLimiting("login")]
     public async Task<IActionResult> ConfirmReset([FromBody] ConfirmResetDto dto)
     {
         try

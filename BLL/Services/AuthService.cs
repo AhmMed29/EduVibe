@@ -22,13 +22,15 @@ public class AuthService : IAuthService
     private static readonly string[] AllowedPublicRoles = { "Student", "Instructor" };
     private readonly AppDbContext _context;
     private readonly IOtpService _otpService;
+    private readonly ILogger<AuthService> _logger;
 
     public AuthService(UserManager<ApplicationUser> userManager
         , ITokenService tokenService
         , IOptions<JwtSettings> jwtSettings
         , IEmailSender emailSender
         , AppDbContext context
-        , IOtpService otpService)
+        , IOtpService otpService
+        , ILogger<AuthService> logger)
     {
         _userManager = userManager;
         _tokenService = tokenService;
@@ -36,6 +38,7 @@ public class AuthService : IAuthService
         _emailSender = emailSender;
         _context = context;
         _otpService = otpService;
+        _logger = logger;
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto dto)
@@ -137,6 +140,8 @@ public class AuthService : IAuthService
             var roles = await _userManager.GetRolesAsync(user);
             var token = await _tokenService.GenerateAccessTokenAsync(user);
 
+            _logger.LogInformation("User {Email} registered as {Role}", dto.Email, requestedRole);
+            
             return new AuthResponseDto
             {
                 AccessToken = token,
@@ -161,16 +166,24 @@ public class AuthService : IAuthService
         // email
         var user = await _userManager.FindByEmailAsync(dto.Email);
         if (user == null)
+        {
+            _logger.LogWarning("Failed login attempt for {Email}", dto.Email);
             throw new UnauthorizedAccessException("Invalid email or password.");
+        }
         
         // password
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, dto.Password);
         if (!isPasswordValid)
+        {
+            _logger.LogWarning("Failed login attempt for {Email}", dto.Email);
             throw new UnauthorizedAccessException("Invalid email or password.");
+        }
 
         var roles = await _userManager.GetRolesAsync(user);
         var token = await _tokenService.GenerateAccessTokenAsync(user);
 
+        _logger.LogInformation("User {Email} logged in", dto.Email);
+        
         return new AuthResponseDto
         {
             AccessToken = token,

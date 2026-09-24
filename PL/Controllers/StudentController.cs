@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace EduVibe.Controllers;
 
 [ApiController]
-[Authorize(Roles ="Admin")]
+[Authorize]
 [Route("api/[controller]")]
 public class StudentController : ControllerBase
 {
@@ -18,6 +18,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin,Manager,Instructor")]
     public async Task<IActionResult> GetAllStudents([FromQuery] StudentFilterRequest request)
     {
         var result = await _studentService.GetAllAsync(request);
@@ -25,6 +26,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Manager,Instructor,Student")]
     public async Task<IActionResult> GetStudent(int id)
     {
         var studentDto = await _studentService.GetByIdAsync(id);
@@ -32,6 +34,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] StudentCreateDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -41,6 +44,7 @@ public class StudentController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Update(int id, [FromBody] StudentUpdateDto dto)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -50,6 +54,7 @@ public class StudentController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id)
     {
         await _studentService.DeleteAsync(id);

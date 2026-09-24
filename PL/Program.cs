@@ -1,12 +1,15 @@
+using Resend;
+using Serilog;
 using System.Text;
 using BLL.Interfaces;
 using BLL.Services;
 using BLL.Settings;
 using EduVibe.Data;
-using Resend;
 using EduVibe.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
 using EduVibe.Models.Entities;
 using EduVibe.Middlewares;
 using EduVibe.Services;
@@ -22,6 +25,7 @@ namespace EduVibe
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Host.UseSerilog((ctx, cfg) => cfg.ReadFrom.Configuration(ctx.Configuration));
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -113,6 +117,64 @@ namespace EduVibe
             
             builder.Services.AddDataProtection();
 
+            builder.Services.AddRateLimiter(options =>
+            {
+                options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+                options.OnRejected = async (context, cancellationToken) =>
+                {
+                    context.HttpContext.Response.Headers.RetryAfter = "60";
+
+                    await context.HttpContext.Response.WriteAsJsonAsync(
+                        new { message = "Too many requests. Please try again later." },
+                        cancellationToken);
+                };
+
+                options.AddPolicy("login", context =>
+                {
+                    var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                    
+                    return RateLimitPartition.GetFixedWindowLimiter(
+                        ip,_ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 5,
+                        Window = TimeSpan.FromMinutes(15),
+                        QueueLimit = 0,
+                        AutoReplenishment = true
+                    });
+                });
+                
+                options.AddPolicy("register", context =>
+                {
+                    var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+                    return RateLimitPartition.GetFixedWindowLimiter(
+                        ip,
+                        _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 3,
+                            Window = TimeSpan.FromHours(1),
+                            QueueLimit = 0,
+                            AutoReplenishment = true
+                        });
+                });
+
+                options.AddPolicy("password-reset", context =>
+                {
+                    var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+                    return RateLimitPartition.GetSlidingWindowLimiter(
+                        ip,
+                        _ => new SlidingWindowRateLimiterOptions
+                        {
+                            PermitLimit = 3,
+                            Window = TimeSpan.FromHours(1),
+                            SegmentsPerWindow = 6,
+                            QueueLimit = 0,
+                            AutoReplenishment = true
+                        });
+                });
+            });
+            
             var app = builder.Build();
 
             app.UseExceptionMiddleware();
@@ -122,10 +184,12 @@ namespace EduVibe
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseSerilogRequestLogging();
 
             app.UseCors("AllowFrontEnd");
             
             app.UseAuthentication();
+            app.UseRateLimiter();
             app.UseAuthorization();
 
             app.MapControllers();
