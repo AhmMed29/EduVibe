@@ -73,7 +73,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("confirm-reset")]
-    [EnableRateLimiting("login")]
+    [EnableRateLimiting("confirm-reset")]
     public async Task<IActionResult> ConfirmReset([FromBody] ConfirmResetDto dto)
     {
         try

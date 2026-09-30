@@ -61,7 +61,7 @@ namespace BLL.Services
             throw new NotImplementedException();
         }
 
-        public Task<string> GetPrincipleFromExpiredToken(ApplicationUser user)
+        public Task<ClaimsPrincipal> GetPrincipalFromExpiredToken(ApplicationUser user)
         {
             throw new NotImplementedException();
         }

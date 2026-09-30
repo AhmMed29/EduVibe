@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using EduVibe.DTOs.Student;
 using EduVibe.Interfaces;
 using EduVibe.Models.Entities;
+using System.Security.Claims;
+using EduVibe.Models.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 namespace EduVibe.Controllers;
 
@@ -25,8 +27,41 @@ public class StudentController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("me")]
+    [Authorize(Roles = "Student")]
+    public async Task<IActionResult> GetMyProfile()
+    {
+        var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Unauthorized();
+
+        var student = await _studentService.GetByApplicationUserIdAsync(userId);
+
+        return Ok(student);
+    }
+    
+    [HttpGet("debug/claims")]
+    [Authorize]
+    public IActionResult DebugClaims()
+    {
+        var identity = User.Identity as ClaimsIdentity;
+
+        return Ok(new
+        {
+            IsAuthenticated = User.Identity?.IsAuthenticated,
+            RoleClaimType = identity?.RoleClaimType,
+            IsStudent = User.IsInRole("Student"),
+            Claims = User.Claims.Select(c => new
+            {
+                c.Type,
+                c.Value
+            })
+        });
+    }
+    
     [HttpGet("{id}")]
-    [Authorize(Roles = "Admin,Manager,Instructor,Student")]
+    [Authorize(Roles = "Admin,Manager,Instructor")]
     public async Task<IActionResult> GetStudent(int id)
     {
         var studentDto = await _studentService.GetByIdAsync(id);

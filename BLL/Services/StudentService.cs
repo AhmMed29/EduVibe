@@ -153,4 +153,19 @@ public class StudentService : IStudentService
         _context.Students.Remove(student);
         await _context.SaveChangesAsync();
     }
+    
+    public async Task<StudentDto> GetByApplicationUserIdAsync(string applicationUserId)
+    {
+        var student = await _context.Students
+            .Include(s => s.Department)
+            .Include(s => s.Address)
+            .Include(s => s.Enrollments)
+            .ThenInclude(e => e.Course)
+            .FirstOrDefaultAsync(s => s.ApplicationUserId == applicationUserId);
+        
+        if (student == null)
+            throw new NotFoundException("Student profile not found.");
+
+        return _mapper.Map<StudentDto>(student);
+    }
 }

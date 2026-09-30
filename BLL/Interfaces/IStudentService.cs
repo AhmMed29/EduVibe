@@ -11,4 +11,5 @@ public interface IStudentService
     Task<StudentDto> CreateAsync(StudentCreateDto dto);
     Task UpdateAsync(int id, StudentUpdateDto dto);
     Task DeleteAsync(int id);
+    Task<StudentDto> GetByApplicationUserIdAsync(string applicationUserId);
 }

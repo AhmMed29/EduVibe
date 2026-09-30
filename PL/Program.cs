@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using System.Security.Claims;
 using EduVibe.Models.Entities;
 using EduVibe.Middlewares;
 using EduVibe.Services;
@@ -77,6 +78,7 @@ namespace EduVibe
             })
             .AddJwtBearer(options =>
             {
+                options.MapInboundClaims = true;
                 options.RequireHttpsMetadata = false; // true in Production
                 options.SaveToken = false;
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -91,7 +93,9 @@ namespace EduVibe
                     ValidAudience = jwtSettings?.Audience,
 
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero // will add +0 minutes to the token expiration time
+                    ClockSkew = TimeSpan.Zero, // will add +0 minutes to the token expiration time
+                    
+                    RoleClaimType = ClaimTypes.Role
                 };
             });
 
@@ -117,7 +121,6 @@ namespace EduVibe
             
             builder.Services.AddDataProtection();
 
-            // tell now this was Fixed Window Algorithm for rate limiting
             builder.Services.AddRateLimiter(options =>
             {
                 options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
@@ -134,32 +137,51 @@ namespace EduVibe
                 {
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                     
-                    return RateLimitPartition.GetFixedWindowLimiter(
-                        ip,_ => new FixedWindowRateLimiterOptions
-                    {
-                        PermitLimit = 5,
-                        Window = TimeSpan.FromMinutes(15),
-                        QueueLimit = 0,
-                        AutoReplenishment = true
-                    });
+                    return RateLimitPartition.GetSlidingWindowLimiter(
+                        partitionKey: ip,
+                        factory: _ => new SlidingWindowRateLimiterOptions
+                        {
+                            PermitLimit = 5,
+                            Window = TimeSpan.FromMinutes(15),
+                            SegmentsPerWindow = 3,
+                            QueueLimit = 0,
+                            AutoReplenishment = true
+                        });
                 });
                 
                 options.AddPolicy("register", context =>
                 {
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 
-                    return RateLimitPartition.GetFixedWindowLimiter(
-                        ip,
-                        _ => new FixedWindowRateLimiterOptions
+                    return RateLimitPartition.GetSlidingWindowLimiter(
+                        partitionKey: ip,
+                        factory: _ => new SlidingWindowRateLimiterOptions
                         {
-                            PermitLimit = 3,
-                            Window = TimeSpan.FromHours(1),
+                            PermitLimit = 5,
+                            Window = TimeSpan.FromMinutes(15),
+                            SegmentsPerWindow = 6,
                             QueueLimit = 0,
                             AutoReplenishment = true
                         });
                 });
 
                 options.AddPolicy("password-reset", context =>
+                {
+                    var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+                    return RateLimitPartition.GetSlidingWindowLimiter(
+                        ip,
+                        _ => new SlidingWindowRateLimiterOptions
+                        {
+                            PermitLimit = 3,
+                            Window = TimeSpan.FromHours(1),
+                            SegmentsPerWindow = 6,
+                            QueueLimit = 0,
+                            AutoReplenishment = true
+                        });
+                });
+                
+                options.AddPolicy("confirm-reset", context =>
                 {
                     var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
 

@@ -61,4 +61,6 @@ public class CourseController : ControllerBase
         await _courseService.DeleteAsync(id);
         return Ok();
     }
+    
+    
 }

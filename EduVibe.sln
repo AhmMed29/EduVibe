@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "PL\PL.csproj", "{76441794-CC32-419B-9826-E8AE5B7A2054}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EduVibe.Tests", "EduVibe.Tests\EduVibe.Tests.csproj", "{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{76441794-CC32-419B-9826-E8AE5B7A2054}.Release|x64.Build.0 = Release|Any CPU
 		{76441794-CC32-419B-9826-E8AE5B7A2054}.Release|x86.ActiveCfg = Release|Any CPU
 		{76441794-CC32-419B-9826-E8AE5B7A2054}.Release|x86.Build.0 = Release|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Debug|x64.Build.0 = Debug|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Debug|x86.Build.0 = Debug|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Release|x64.ActiveCfg = Release|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Release|x64.Build.0 = Release|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Release|x86.ActiveCfg = Release|Any CPU
+		{03384255-E0FC-44A9-92A7-CEC48CAAFF3F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
