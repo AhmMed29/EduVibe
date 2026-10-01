@@ -33,17 +33,6 @@ A .NET 9 Web API for a courses platform, built with a clean 3-Layer Architecture
 ```csharp
 API-Student Management System/
 ├── EduVibe.sln                          (Solution file - 4 projects)
-├── README.md
-├── CORS-Guide-and-Growth-Plan.md
-├── migration.sql
-├── .gitignore
-├── .github/
-├── .idea/
-├── .opencode/
-├── .vs/
-├── publish/
-├── publish-output/
-│
 ├── DAL/                                 (Data Access Layer - Class Library)
 │   ├── DAL.csproj                       (net9.0, EF Core 9.0.12, SQL Server)
 │   ├── Data/
