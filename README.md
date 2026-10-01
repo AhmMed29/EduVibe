@@ -30,6 +30,117 @@ A .NET 9 Web API for a courses platform, built with a clean 3-Layer Architecture
 - **Database:** SQL Server (Code-First)
 - **Frontend:** Static HTML/CSS/JS in `/Frontend` (separate from API, served independently)
 
+```csharp
+API-Student Management System/
+├── EduVibe.sln                          (Solution file - 4 projects)
+├── README.md
+├── CORS-Guide-and-Growth-Plan.md
+├── migration.sql
+├── .gitignore
+├── .github/
+├── .idea/
+├── .opencode/
+├── .vs/
+├── publish/
+├── publish-output/
+│
+├── DAL/                                 (Data Access Layer - Class Library)
+│   ├── DAL.csproj                       (net9.0, EF Core 9.0.12, SQL Server)
+│   ├── Data/
+│   │   ├── AppDbContext.cs              (DbContext with IdentityDbContext<ApplicationUser>)
+│   │   └── AppDbContextFactory.cs       (Design-time factory for migrations)
+│   ├── Entities/
+│   │   ├── ApplicationUser.cs           (Identity user with FirstName, LastName, ProfilePicture, RefreshToken)
+│   │   ├── Student.cs                   (Student + StuAddress value object)
+│   │   ├── Instructor.cs                (Instructor + InsAddress value object)
+│   │   ├── Course.cs                    (Course entity)
+│   │   ├── Department.cs                (Department entity)
+│   │   ├── Enrollment.cs                (Join entity: Student <-> Course)
+│   │   ├── InstructorCourse.cs          (Join entity: Instructor <-> Course)
+│   │   ├── CourseSchedule.cs            (Schedule for courses)
+│   │   ├── OtpCode.cs                   (OTP code storage with hashing)
+│   │   └── ActivityLog.cs               (Activity logging)
+│   ├── Enums/
+│   │   ├── GenderTypeEnum.cs            (Male, Female)
+│   │   └── OtpPurpose.cs               (Register, Reset)
+│   ├── Configuration/
+│   │   ├── StudentConfig.cs
+│   │   ├── OtpCodeConfig.cs
+│   │   ├── InstructorConfig.cs
+│   │   ├── EnrollmentConfig.cs
+│   │   ├── DepartmentConfig.cs
+│   │   ├── CourseScheduleConfig.cs
+│   │   └── CourseConfig.cs
+│   └── Migrations/                      (6 EF Core migrations)
+│
+├── BLL/                                 (Business Logic Layer - Class Library)
+│   ├── BLL.csproj                       (net9.0, references DAL, AutoMapper, SendGrid, Resend)
+│   ├── Interfaces/
+│   │   ├── IStudentService.cs
+│   │   ├── ICourseService.cs
+│   │   ├── IDepartmentService.cs
+│   │   ├── IInstructorService.cs
+│   │   ├── IAuthService.cs
+│   │   ├── IOtpService.cs
+│   │   ├── ITokenService.cs
+│   │   └── IUserService.cs              (ENTIRELY COMMENTED OUT)
+│   ├── Services/
+│   │   ├── StudentService.cs
+│   │   ├── CourseService.cs
+│   │   ├── DepartmentService.cs
+│   │   ├── InstructorService.cs
+│   │   ├── AuthService.cs
+│   │   ├── OtpService.cs
+│   │   ├── TokenService.cs
+│   │   ├── EmailSender.cs
+│   │   └── UserService.cs              (ENTIRELY COMMENTED OUT)
+│   ├── DTOs/
+│   │   ├── Account/  (LoginDto, RegisterDto, AuthResponseDto, OtpResult, RequestResetDto, ConfirmResetDto, ConfirmEmailDto, ResendCodeDto)
+│   │   ├── Student/  (StudentDto, StudentCreateDto, StudentUpdateDto, StudentFilterRequest)
+│   │   ├── Course/   (CourseDto, CourseCreateDto, CourseUpdateDto, CourseFilterRequest)
+│   │   ├── Instructor/ (InstructorDto, InstructorCreateDto, InstructorUpdateDto, InstructorFilterRequest)
+│   │   ├── Department/ (DepartmentDto, DepartmentFilterRequest)
+│   │   ├── Enrollment/ (EnrollmentDto)
+│   │   └── Shared/   (AddressDto)
+│   ├── Mappers/
+│   │   └── AutoMapperProfile.cs
+│   ├── Validators/
+│   │   └── DateValidators.cs
+│   ├── Settings/
+│   │   └── JwtSettings.cs
+│   ├── Exceptions/
+│   │   ├── NotFoundException.cs
+│   │   └── BadRequestException.cs
+│   └── Response/
+│       ├── PagedResponse.cs
+│       └── ErrorResponse.cs
+│
+├── PL/                                  (Presentation Layer - Web API)
+│   ├── PL.csproj                        (net9.0, ASP.NET Core Web, references BLL)
+│   ├── Program.cs                       (DI configuration, middleware pipeline, seeding)
+│   ├── Controllers/
+│   │   ├── StudentController.cs
+│   │   ├── CourseController.cs
+│   │   ├── DepartmentController.cs
+│   │   ├── InstructorController.cs
+│   │   └── AuthController.cs
+│   ├── Middlewares/
+│   │   ├── ExceptionMiddleware.cs
+│   │   └── ExceptionMiddlewareExtensions.cs
+│   ├── Properties/
+│   │   └── launchSettings.json
+│   ├── appsettings.json
+│   └── appsettings.Development.json
+│
+├── EduVibe.Tests/                       (Test Project - xUnit)
+│   ├── EduVibe.Tests.csproj              (net9.0, xUnit 2.9.2, coverlet.collector)
+│   ├── LogAnalyzerTests.cs              (5 test methods for LogAnalyzer)
+│   └── Helpers/
+│       └── LogAnalyzer.cs               (Simple file extension validator)
+│
+└── Frontend/                            (Frontend directory - not explored in detail)
+```
+
 ## Tech Stack
 
 - .NET 9, Entity Framework Core 9, ASP.NET Core Identity
